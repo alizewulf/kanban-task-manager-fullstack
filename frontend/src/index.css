@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #635fc7;
+  --color-primary-hover: #a8a4ff;
+  --color-accent1: #000112;
+  --color-accent1-hover: #2b2c37;
+  --color-accent2: #2b2c37;
+  --color-accent2-hover: #3e3f4e;
+  --color-accent3: #e4ebfa;
+  --color-accent3-hover: #828fa3;
+  --color-accent4: #f4f7fd;
+  --color-danger: #ea5555;
+  --color-danger-hover: #ff9898;
+}
+
+:root {
+  color-scheme: light;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #000112;
+  background-color: #f4f7fd;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f4f7fd 0%, #e4ebfa 100%);
+  color: #000112;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+input::placeholder {
+  color: #828fa3;
+}
