@@ -12,15 +12,6 @@ function RegisterPage() {
 
       <form className="space-y-4">
         <label className="block text-[13px] font-semibold text-accent1">
-          <span className="mb-2 block">Full name</span>
-          <input
-            type="text"
-            placeholder="Alex Morgan"
-            className="w-full rounded-2xl border border-accent3 bg-accent4 px-4 py-3 text-[14px] text-accent1 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-          />
-        </label>
-
-        <label className="block text-[13px] font-semibold text-accent1">
           <span className="mb-2 block">Email</span>
           <input
             type="email"

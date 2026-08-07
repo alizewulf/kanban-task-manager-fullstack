@@ -1,0 +1,22 @@
+[
+    {
+        "login": "admin@gmail.com",
+        "password": "password"
+    },
+    {
+        "login": "test@gmail.com",
+        "password": "password"
+    },
+    {
+        "login": "moderator@gmail.com",
+        "password": "password"
+    },
+    {
+        "login": "user@gmail.com",
+        "password": "password"
+    },
+    {
+        "login": "guest@gmail.com",
+        "password": "password"
+    }
+]
