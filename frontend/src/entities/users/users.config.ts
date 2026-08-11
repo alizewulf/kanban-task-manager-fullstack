@@ -1,5 +1,5 @@
 import { API_LINK } from "../../shared/config/api.config";
 
-const usersAPI = `${API_LINK}/users`
+const USERS_API = `${API_LINK}/users`
 
-export default usersAPI
+export default USERS_API

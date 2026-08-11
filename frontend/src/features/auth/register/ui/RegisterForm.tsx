@@ -1,45 +1,35 @@
-import { Formik } from "formik"
+import { Field, Form, Formik } from "formik"
 import Button from "../../../../shared/ui/button/Button"
+import createUser from "../model/createUser"
 
-function RegisterForm({ state, setState }: any) {
+function RegisterForm() {
   return (
     <Formik initialValues={
       {
-        email: "",
+        login: "",
         password: ""
       }}
-      onSubmit={() => {
-
+      onSubmit={(values) => {
+          console.log(values)
+          createUser(values)
       }}
     >
-      <form className="space-y-4">
+      <Form className="space-y-4">
         <label className="block text-[13px] font-semibold text-accent1">
-          <span className="mb-2 block">Email</span>
-          <input
-            onChange={(e) => {
-              setState({
-                ...state,
-                login: e.target.value
-              })
-            }}
-            value={setState.email}
-            type="email"
-            placeholder="alex@example.com"
+          <span className="mb-2 block">Login</span>
+          <Field
+            name="login"
+            type="text"
+            placeholder="Your Login"
             className="w-full rounded-2xl border border-accent3 bg-accent4 px-4 py-3 text-[14px] text-accent1 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
         </label>
 
         <label className="block text-[13px] font-semibold text-accent1">
           <span className="mb-2 block">Password</span>
-          <input
+          <Field
+            name="password"
             type="password"
-            onChange={(e) => {
-              setState({
-                ...state,
-                password: e.target.value
-              })
-            }}
-            value={setState.password}
             placeholder="Create a strong password"
             className="w-full rounded-2xl border border-accent3 bg-accent4 px-4 py-3 text-[14px] text-accent1 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
@@ -48,9 +38,8 @@ function RegisterForm({ state, setState }: any) {
         <Button type="submit" className="mt-2 w-full">
           Create account
         </Button>
-      </form>
+      </Form>
     </Formik>
-
   )
 }
 
