@@ -39,8 +39,8 @@ function LoginForm({ login, users }: LoginFormProps) {
             <span className="mb-2 block">Login</span>
 
             <input
-              type="email"
-              name="email"
+              type="text"
+              name="login"
               value={values.email}
               onChange={handleChange}
               onBlur={handleBlur}
