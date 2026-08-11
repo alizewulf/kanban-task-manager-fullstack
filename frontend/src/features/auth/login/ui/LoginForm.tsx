@@ -1,4 +1,4 @@
-import { Formik, Form } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../../shared/ui/button/Button";
 import validate from "../model/validate";
 import type { User } from "../../../../entities/users/interface";
@@ -19,49 +19,65 @@ function LoginForm({ login, users }: LoginFormProps) {
   return (
     <Formik
       initialValues={{
-        email: "",
+        login: "",
         password: "",
         rememberMe: false,
       }}
-      onSubmit={(values) => {
+      onSubmit={(values, { setStatus }) => {
         const result = login(users, {
-          login: values.email,
+          login: values.login,
           password: values.password,
         });
 
-        console.log(result);
+        if (result === "error") {
+          setStatus("WRONG LOGIN OR PASSWORD");
+          return;
+        }
+
+        setStatus("WELCOME BACK");
+        console.log("Authorized user:", result);
       }}
       validate={validate}
     >
-      {({ values, handleChange, handleBlur }) => (
+      {({ values, handleChange, status }) => (
         <Form className="space-y-4">
           <label className="block text-[13px] font-semibold text-accent1">
             <span className="mb-2 block">Login</span>
 
-            <input
+            <Field
               type="text"
               name="login"
-              value={values.email}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              placeholder="Login"
+              placeholder="Your login"
               className="w-full rounded-2xl border border-accent3 bg-accent4 px-4 py-3 text-[14px] text-accent1 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            />
+            <ErrorMessage
+              name="login"
+              component="div"
+              className="mt-2 text-sm text-red-500"
             />
           </label>
 
           <label className="block text-[13px] font-semibold text-accent1">
             <span className="mb-2 block">Password</span>
 
-            <input
+            <Field
               type="password"
               name="password"
-              value={values.password}
-              onChange={handleChange}
-              onBlur={handleBlur}
               placeholder="••••••••"
               className="w-full rounded-2xl border border-accent3 bg-accent4 px-4 py-3 text-[14px] text-accent1 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
             />
+            <ErrorMessage
+              name="password"
+              component="div"
+              className="mt-2 text-sm text-red-500"
+            />
           </label>
+
+          {status ? (
+            <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {status}
+            </div>
+          ) : null}
 
           <div className="flex items-center justify-between text-[13px]">
             <label className="flex items-center gap-2 text-accent3-hover">
