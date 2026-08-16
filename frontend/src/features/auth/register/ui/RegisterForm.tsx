@@ -1,5 +1,6 @@
-import { Field, Form, Formik } from "formik"
+import { ErrorMessage, Field, Form, Formik } from "formik"
 import Button from "../../../../shared/ui/button/Button"
+import validate from "../model/validate"
 import createUser from "../model/createUser"
 
 function RegisterForm() {
@@ -9,6 +10,7 @@ function RegisterForm() {
         login: "",
         password: ""
       }}
+      validate={validate}
       onSubmit={(values) => {
           console.log(values)
           createUser(values)
@@ -23,6 +25,11 @@ function RegisterForm() {
             placeholder="Your Login"
             className="w-full rounded-2xl border border-accent3 bg-accent4 px-4 py-3 text-[14px] text-accent1 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
           />
+          <ErrorMessage
+            name="login"
+            component="div"
+            className="mt-2 text-sm text-red-500"
+          />
         </label>
 
         <label className="block text-[13px] font-semibold text-accent1">
@@ -32,6 +39,11 @@ function RegisterForm() {
             type="password"
             placeholder="Create a strong password"
             className="w-full rounded-2xl border border-accent3 bg-accent4 px-4 py-3 text-[14px] text-accent1 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+          />
+          <ErrorMessage
+            name="password"
+            component="div"
+            className="mt-2 text-sm text-red-500"
           />
         </label>
 

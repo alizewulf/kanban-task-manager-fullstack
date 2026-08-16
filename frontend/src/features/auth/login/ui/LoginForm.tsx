@@ -1,6 +1,5 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../../shared/ui/button/Button";
-import validate from "../model/validate";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../../../store/store";
 import { setAuth } from "../model/authSlice";
@@ -31,7 +30,6 @@ function LoginForm({ login, users }: LoginFormProps) {
           setStatus("WELCOME BACK");
 
         }}
-        validate={validate}
       >
         {({ values, handleChange, status }) => (
           <Form className="space-y-4">
