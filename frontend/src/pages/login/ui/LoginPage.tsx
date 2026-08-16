@@ -23,7 +23,9 @@ function LoginPage() {
         <h1 className="text-[28px] font-bold leading-tight text-accent1">Welcome back</h1>
         <p className="mt-2 text-[14px] leading-6 text-accent3-hover">Sign in to keep your tasks organized and move work forward.</p>
       </div>
+
       {users && <LoginForm login={login} users={users}/>}
+      
       <div className="mt-6 flex items-center justify-center gap-2 text-[13px] text-accent3-hover">
         <span>New here?</span>
         <Link to="/register" className="font-semibold text-primary hover:text-primary-hover">
