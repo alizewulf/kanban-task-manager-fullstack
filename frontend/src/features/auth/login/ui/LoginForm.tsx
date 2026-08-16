@@ -1,12 +1,14 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Button from "../../../../shared/ui/button/Button";
 import { useDispatch } from "react-redux";
+import { useNavigate } from 'react-router';
 import type { AppDispatch } from "../../../../store/store";
 import { setAuth } from "../model/authSlice";
 import type { LoginFormProps } from "./interface";
 
 function LoginForm({ login, users }: LoginFormProps) {
   const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
   return (
     <>
       <Formik
@@ -28,6 +30,7 @@ function LoginForm({ login, users }: LoginFormProps) {
 
           dispatch(setAuth(true))
           setStatus("WELCOME BACK");
+          navigate('/app', { replace: true })
 
         }}
       >

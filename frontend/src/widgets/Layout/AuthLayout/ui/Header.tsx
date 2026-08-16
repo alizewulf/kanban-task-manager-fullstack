@@ -1,4 +1,4 @@
-function Header() {
+function AuthHeader() {
   return (
     <header className="border-b border-accent3/70 bg-white/80 backdrop-blur-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
@@ -16,4 +16,4 @@ function Header() {
   );
 }
 
-export default Header;
+export default AuthHeader;
