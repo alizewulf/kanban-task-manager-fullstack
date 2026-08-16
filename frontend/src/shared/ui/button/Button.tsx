@@ -8,18 +8,20 @@ export interface ButtonProps {
   className?: string;
   style?: CSSProperties;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 export type ButtonSizes = "lg" | "sm";
 export type ButtonVariants = "primary" | "secondary" | "destructive";
 
-function Button({ children, variant = "primary", size = "lg", className = "", style, type = "button" }: ButtonProps) {
+function Button({ children, variant = "primary", size = "lg", className = "", style, type = "button", disabled = false }: ButtonProps) {
   const buttonClassName = `${ButtonvariantStyles[variant]} rounded-full border border-transparent transition-all duration-200`;
 
   return (
     <button
       type={type}
-      className={`${buttonClassName} text-white ${Buttonsizes[size]} cursor-pointer ${className}`}
+      disabled={disabled}
+      className={`${buttonClassName} text-white ${Buttonsizes[size]} ${disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"} ${className}`}
       style={style}
     >
       {children}

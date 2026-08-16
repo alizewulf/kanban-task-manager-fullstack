@@ -6,9 +6,10 @@ import type { AppDispatch } from "../../../../store/store";
 import { setAuth } from "../model/authSlice";
 import type { LoginFormProps } from "./interface";
 
-function LoginForm({ login, users }: LoginFormProps) {
+function LoginForm({ login, users, isUsersLoading = false }: LoginFormProps) {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
+
   return (
     <>
       <Formik
@@ -18,23 +19,26 @@ function LoginForm({ login, users }: LoginFormProps) {
           rememberMe: false,
         }}
         onSubmit={(values, { setStatus }) => {
+          if (isUsersLoading || users.length === 0) {
+            return;
+          }
+
           const result = login(users, {
             login: values.login,
             password: values.password,
           });
 
           if (result === "error") {
-            setStatus("WRONG LOGIN OR PASSWORD");
+            setStatus("Wrong login or password");
             return;
           }
 
           dispatch(setAuth(true))
-          setStatus("WELCOME BACK");
+          setStatus("Welcome back");
           navigate('/app', { replace: true })
-
         }}
       >
-        {({ values, handleChange, status }) => (
+        {({ values, handleChange, status, isSubmitting }) => (
           <Form className="space-y-4">
             <label className="block text-[13px] font-semibold text-accent1">
               <span className="mb-2 block">Login</span>
@@ -95,8 +99,12 @@ function LoginForm({ login, users }: LoginFormProps) {
               </a>
             </div>
 
-            <Button type="submit" className="mt-2 w-full">
-              Sign in
+            <Button
+              type="submit"
+              className="mt-2 w-full"
+              disabled={isUsersLoading || users.length === 0 || isSubmitting}
+            >
+              {isUsersLoading ? "Loading..." : "Sign in"}
             </Button>
           </Form>
         )}

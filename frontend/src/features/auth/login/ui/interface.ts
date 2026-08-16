@@ -10,4 +10,5 @@ export interface LoginFormProps {
   ) => User | "error";
 
   users: User[];
+  isUsersLoading?: boolean;
 }
