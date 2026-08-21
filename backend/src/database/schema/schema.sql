@@ -3,3 +3,10 @@ CREATE TABLE users (
     login VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL
 )
+
+CREATE TABLE columns (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  position INTEGER NOT NULL
+);
