@@ -1,15 +1,13 @@
 import { Router } from "express";
-import { createColumnController, getColumnsController } from "./column.controller.js";
+import {
+  createColumnController,
+  getColumnsController,
+} from "./column.controller.js";
 
-const router = Router()
+const router = Router();
 
-router.get(
-  '/users/:userId/columns',
-  getColumnsController
-)
-router.post(
-  '/users/:userId/columns',
-  createColumnController
-)
+router.get("/:userId", getColumnsController);
 
-export default router
+router.post("/:userId", createColumnController);
+
+export default router;
