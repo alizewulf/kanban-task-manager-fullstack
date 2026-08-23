@@ -1,6 +1,8 @@
 function AppPage() {
   return (
-    <section>App</section>
+    <section>
+      
+    </section>
   )
 }
 
