@@ -1,14 +1,18 @@
 import { useMatches } from "react-router";
-import AppLayout from "./layouts/AppLayout";
 import AuthLayout from "./layouts/AuthLayout";
 import { AppProvider } from "../shared/context/app.context";
+import { Outlet } from "react-router";
+
+interface LayoutHandle {
+  layout?: "app" | "auth";
+}
 
 function Layout() {
   const matches = useMatches();
-  const match = [...matches].reverse().find((m) => m.handle && (m.handle as any).layout);
-  const layout = (match?.handle as any)?.layout ?? "app";
+  const match = [...matches].reverse().find((m) => (m.handle as LayoutHandle | undefined)?.layout);
+  const layout = (match?.handle as LayoutHandle | undefined)?.layout ?? "app";
 
-  return layout === "auth" ? <AuthLayout /> : <AppProvider><AppLayout /></AppProvider>;
+  return layout === "auth" ? <AuthLayout /> : <AppProvider><Outlet /></AppProvider>;
 }
 
 export default Layout;

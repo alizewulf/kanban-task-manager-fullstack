@@ -1,8 +1,11 @@
+import { Main, Sidebar } from "../../../widgets/Layout/AppLayout";
+
 function AppPage() {
   return (
-    <section>
-      
-    </section>
+    <div className="flex flex-row">
+      <Sidebar />
+      <Main />
+    </div>
   )
 }
 
