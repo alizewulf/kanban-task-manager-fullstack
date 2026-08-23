@@ -4,7 +4,7 @@ import type { User } from "../../../../entities/users/interface";
 
 
 
-const createUser = async (user:User) => {
+const createUser = async (user: Omit<User, "id">) => {
 try {
     const res = await axios.post(USERS_API, user)
     console.log(res.data);

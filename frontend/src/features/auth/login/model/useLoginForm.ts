@@ -53,7 +53,7 @@ function useLoginForm({ login, users, isUsersLoading = false }: UseLoginFormPara
       }
 
       setIsSubmitBlocked(false);
-      dispatch(setAuth({ isAuth: true, rememberMe: values.rememberMe }));
+      dispatch(setAuth({ isAuth: true, user: result, rememberMe: values.rememberMe }));
       setStatus("Welcome back");
       navigate("/app", { replace: true });
     },
