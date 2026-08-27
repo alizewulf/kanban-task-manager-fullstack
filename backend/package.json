@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx --watch index.ts",
+    "dev": "clear & tsx --watch index.ts",
     "typecheck": "tsc --watch --noemit"
   },
   "keywords": [],
