@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { Buttonsizes, ButtonvariantStyles } from "./styles";
+import { Buttonsizes, ButtonvariantStyles } from "@/shared/ui/button/styles";
 
 export interface ButtonProps {
   children: ReactNode;
