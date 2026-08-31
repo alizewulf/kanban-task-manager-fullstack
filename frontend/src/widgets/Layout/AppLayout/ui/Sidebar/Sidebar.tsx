@@ -9,7 +9,7 @@ function Sidebar() {
     <aside className="w-1/5 flex flex-col justify-between">
       <div className="flex flex-col gap-20">
         <SidebarHeader />
-        {auth.user && <SidebarColumns userId={auth.user.id} />}
+        {auth.user && <SidebarColumns userId={auth.user.id}/>}
       </div>
     </aside>
   )

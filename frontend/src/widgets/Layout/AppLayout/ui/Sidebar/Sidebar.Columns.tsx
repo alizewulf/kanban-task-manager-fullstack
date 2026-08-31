@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import ColumnSkeleton from "./Column.Skeleton";
 import CreateColumnButton from "@/features/columns/model/CreateColumn";
 
-function SidebarColumns({ userId }: { userId: number }) {
+function SidebarColumns({ userId }:{userId:number}) {
 
   const { data, loading, error } = useColumns(userId)
   const { selectedColumn, setSelectedColumn } = useAppContext();
@@ -62,7 +62,7 @@ function SidebarColumns({ userId }: { userId: number }) {
           ))
         )}
 
-        <CreateColumnButton color={iconFillColors.create} onClick={() => (null)}/>
+        <CreateColumnButton color={iconFillColors.create}/>
       </ul>
     </div>
   )

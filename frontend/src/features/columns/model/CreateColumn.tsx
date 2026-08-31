@@ -2,7 +2,7 @@ import AbstractIcon from "@/widgets/Layout/AppLayout/ui/Sidebar/icons/AbstractIc
 
 interface ColumnButtonProps {
     color: any
-    onClick: any,
+    onClick?: any,
 }
 
 function CreateColumnButton({ color, onClick }: ColumnButtonProps) {
