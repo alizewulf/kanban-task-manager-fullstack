@@ -4,7 +4,7 @@ export const iconFillColors = {
     create: "#635FC7",
 } as const
 
-type IconFillColor = typeof iconFillColors[keyof typeof iconFillColors]
+export type IconFillColor = typeof iconFillColors[keyof typeof iconFillColors]
 
 function AbstractIcon({ fill }: { fill: IconFillColor }) {
     return (

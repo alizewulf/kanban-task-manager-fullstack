@@ -1,9 +1,10 @@
-import useColumns from "../../../../../features/columns/useColumns/useColumns"
-import textStyles from "../../../../../shared/typography/typography";
+import  useColumns  from "@/features/columns/useColumns/useColumns"
+import textStyles from "@/shared/typography/typography";
 import AbstractIcon, { iconFillColors } from "./icons/AbstractIcon";
-import { useAppContext } from "../../../../../shared/context/app.context";
+import { useAppContext } from "@/shared/context/app.context";
 import { useState, useEffect } from "react";
 import ColumnSkeleton from "./Column.Skeleton";
+import CreateColumnButton from "@/features/columns/model/CreateColumn";
 
 function SidebarColumns({ userId }: { userId: number }) {
 
@@ -11,7 +12,6 @@ function SidebarColumns({ userId }: { userId: number }) {
   const { selectedColumn, setSelectedColumn } = useAppContext();
   const [activeColumn, setActiveColumn] = useState<number>(1)
 
-  // Автоматически установить первую колонну при загрузке
   useEffect(() => {
     if (!loading && data.length > 0 && !selectedColumn) {
       setSelectedColumn(data[0]);
@@ -62,10 +62,7 @@ function SidebarColumns({ userId }: { userId: number }) {
           ))
         )}
 
-        <li className="text-primary text-[15px] py-4 pl-8 capitalize cursor-pointer flex gap-4 font-bold items-center">
-          <AbstractIcon fill={iconFillColors.create} />
-          + Create New Board
-        </li>
+        <CreateColumnButton color={iconFillColors.create} onClick={() => (null)}/>
       </ul>
     </div>
   )

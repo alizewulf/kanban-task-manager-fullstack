@@ -3,8 +3,8 @@ import { useAppContext } from "../../../../shared/context/app.context";
 export default function AppMain({ children }: { children?: React.ReactNode }) {
   const {selectedColumn} = useAppContext()
   return (
-    <main className="flex min-h-[calc(100vh-80px)] items-start justify-center px-6 py-10 bg-gray-50">
-      <div className="w-full max-w-6xl">{children}</div>
+    <main className="flex h-screen bg-gray-50 w-full">
+      {children}
       <div>{selectedColumn?.title}</div>
     </main>
   );
