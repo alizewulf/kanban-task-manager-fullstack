@@ -4,13 +4,16 @@ import AbstractIcon, { iconFillColors } from "./icons/AbstractIcon";
 import { useAppContext } from "@/shared/context/app.context";
 import { useState, useEffect } from "react";
 import ColumnSkeleton from "./Column.Skeleton";
-import CreateColumnButton from "@/features/columns/model/CreateColumn";
+import CreateColumnButton from "@/features/columns/ui/CreateColumnButton";
+import { useModal } from "@/shared/ui/modal/useModal";
+import CreateColumnModal from "@/features/columns/ui/CreateColumnModal";
 
 function SidebarColumns({ userId }:{userId:number}) {
 
   const { data, loading, error } = useColumns(userId)
   const { selectedColumn, setSelectedColumn } = useAppContext();
   const [activeColumn, setActiveColumn] = useState<number>(1)
+  const { openModal } = useModal()
 
   useEffect(() => {
     if (!loading && data.length > 0 && !selectedColumn) {
@@ -22,7 +25,6 @@ function SidebarColumns({ userId }:{userId:number}) {
   if (error) {
     return <div>{error}</div>;
   }
-
   return (
     <div className="flex flex-col gap-5">
       <span className={`px-8 ${textStyles.heading.sm} tracking-[2.4px] text-accent3-hover uppercase font-bold`}>
@@ -61,8 +63,7 @@ function SidebarColumns({ userId }:{userId:number}) {
             </li>
           ))
         )}
-
-        <CreateColumnButton color={iconFillColors.create}/>
+        <CreateColumnButton color={iconFillColors.create} onClick={() => openModal(<CreateColumnModal/>)}/>
       </ul>
     </div>
   )
