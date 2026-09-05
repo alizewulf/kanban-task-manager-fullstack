@@ -4,8 +4,13 @@ import { Field, Formik, Form } from "formik"
 import createColumn from "../model/createColumn"
 import { useSelector } from "react-redux"
 import type { RootState } from "@/store/store"
+import type { Column } from "../model/column.types"
 
-function CreateColumnModal() {
+interface CreateColumnModalProps {
+  onCreated: (column: Column) => void
+}
+
+function CreateColumnModal({ onCreated }: CreateColumnModalProps) {
   const { closeModal } = useModal()
   const auth = useSelector((state: RootState) => state.auth)
   return (
@@ -21,7 +26,8 @@ function CreateColumnModal() {
             return
           }
 
-          await createColumn(auth.user.id, value.title)
+          const column = await createColumn(auth.user.id, value.title)
+          onCreated(column)
           closeModal()
         }}
       >

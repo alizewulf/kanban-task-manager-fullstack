@@ -7,13 +7,20 @@ import ColumnSkeleton from "./Column.Skeleton";
 import CreateColumnButton from "@/features/columns/ui/CreateColumnButton";
 import { useModal } from "@/shared/ui/modal/useModal";
 import CreateColumnModal from "@/features/columns/ui/CreateColumnModal";
+import type { Column } from "@/features/columns/model/column.types";
 
 function SidebarColumns({ userId }:{userId:number}) {
 
-  const { data, loading, error } = useColumns(userId)
+  const { data, loading, error, addColumn } = useColumns(userId)
   const { selectedColumn, setSelectedColumn } = useAppContext();
   const [activeColumn, setActiveColumn] = useState<number>(1)
   const { openModal } = useModal()
+
+  function handleColumnCreated(column: Column) {
+    addColumn(column)
+    setSelectedColumn(column)
+    setActiveColumn(column.id)
+  }
 
   useEffect(() => {
     if (!loading && data.length > 0 && !selectedColumn) {
@@ -63,7 +70,10 @@ function SidebarColumns({ userId }:{userId:number}) {
             </li>
           ))
         )}
-        <CreateColumnButton color={iconFillColors.create} onClick={() => openModal(<CreateColumnModal/>)}/>
+        <CreateColumnButton
+          color={iconFillColors.create}
+          onClick={() => openModal(<CreateColumnModal onCreated={handleColumnCreated} />)}
+        />
       </ul>
     </div>
   )

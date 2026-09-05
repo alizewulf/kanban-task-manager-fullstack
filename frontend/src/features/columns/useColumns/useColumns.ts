@@ -13,6 +13,14 @@ function useColumns(userId: number) {
         loading: true,
         error: null
     })
+
+    function addColumn(column: Column) {
+        setState(prev => ({
+            ...prev,
+            data: [...prev.data, column]
+        }))
+    }
+
     useEffect(() => {
         async function fetchColumns() {
             try {
@@ -39,7 +47,7 @@ function useColumns(userId: number) {
         }
         fetchColumns()
     },[userId])
-    return state
+    return { ...state, addColumn }
 }
 
 export default useColumns
