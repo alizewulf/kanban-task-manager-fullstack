@@ -28,7 +28,7 @@ function Modal({ children }: ModalProps) {
 
       {isOpen && (
         <div className="absolute w-screen flex items-center justify-center h-screen bg-black/50" onClick={closeModal}>
-          <div className="bg-white p-8 text-black" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white p-8 text-black rounded-md" onClick={(e) => e.stopPropagation()}>
             {content}
           </div>
         </div>
