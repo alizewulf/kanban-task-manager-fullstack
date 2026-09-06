@@ -6,8 +6,11 @@ import ThemeButton from "@/features/theme";
 
 function Sidebar() {
   const auth = useSelector((state:RootState) => state.auth)
+  const theme = useSelector((state:RootState) => state.theme.theme)
+  const isDark = theme === "dark"
+
   return (
-    <aside className="w-1/5 flex flex-col justify-between">
+    <aside className={`w-1/5 flex flex-col justify-between ${isDark? "bg-white" : "bg-dark"}`}>
       <div className="flex flex-col gap-20">
         <SidebarHeader />
         {auth.user && <SidebarColumns userId={auth.user.id}/>}
