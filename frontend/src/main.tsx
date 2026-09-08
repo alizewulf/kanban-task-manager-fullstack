@@ -5,7 +5,7 @@ import App from './app/App.tsx';
 import { Provider } from 'react-redux';
 import { store } from './store/store.ts';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { applyTheme } from './features/theme/mode/themeStorage';
+import { applyTheme } from './features/theme/model/themeStorage.ts';
 
 applyTheme(store.getState().theme.theme);
 

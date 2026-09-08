@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getStoredTheme, saveTheme, applyTheme, type Theme } from "../mode/themeStorage";
+import { getStoredTheme, saveTheme, applyTheme, type Theme } from "./themeStorage";
 
 interface ThemeState {
   theme: Theme;
