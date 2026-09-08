@@ -1,4 +1,5 @@
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux";
+import { toggleTheme } from "../model/themeSlice";
 import type { AppDispatch, RootState } from "../../../store/store";
 import { MoonSVG, SunSVG } from "./Icons";
 
@@ -8,14 +9,14 @@ function ThemeButton() {
     const isDark = theme === "dark";
 
     return (
-        <div className={`flex items-center px-6 py-3.5 rounded-md justify-center gap-7 ${isDark? "bg-accent4" : "bg-very-darkbg"}`}>
+        <div className={`flex items-center px-6 py-3.5 rounded-md justify-center gap-7 ${isDark ? "bg-accent4" : "bg-very-darkbg"}`}>
             <SunSVG />
 
             <button
                 type="button"
                 role="switch"
                 aria-checked={isDark}
-                onClick={() => dispatch({ type: "theme/toggleTheme" })}
+                onClick={() => dispatch(toggleTheme())}
                 className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-indigo-500 ${isDark ? "bg-gray-600" : "bg-indigo-500"}`}
             >
                 <span
