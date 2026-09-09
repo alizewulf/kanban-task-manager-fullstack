@@ -1,4 +1,5 @@
 import textStyles from "@/shared/typography/typography"
+import EyeIconDark from "./EyeIconDark"
 import EyeIcon from "./EyeIcon"
 
 interface SidebarButtonProps {
@@ -12,11 +13,11 @@ function ShowSidebarButton({ state, setState }: SidebarButtonProps) {
         <>
             {state ? (
                 <button onClick={() => setState(!state)} className={`${textStyles.heading.md} text-accent3-hover flex mt-5 items-center gap-4`}>
-                    <EyeIcon />
+                    <EyeIconDark />
                     Hide Sidebar
                 </button>
             ) : (
-                <button onClick={() => setState(!state)}>Show Sidebar</button>
+                <button className="p-5 bg-primary absolute rounded-r-full bottom-8" onClick={() => setState(!state)}><EyeIcon/></button>
             )}
         </>
     )
