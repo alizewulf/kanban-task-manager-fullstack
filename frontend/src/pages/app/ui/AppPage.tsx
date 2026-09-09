@@ -1,17 +1,19 @@
-import { useAppContext } from "@/shared/context/app.context";
-import { Main, Sidebar } from "../../../widgets/Layout/AppLayout";
+import { Header, Main, Sidebar } from "../../../widgets/Layout/AppLayout";
 import Modal from "@/shared/ui/modal";
 
+
 function AppPage() {
-  const { selectedColumn } = useAppContext()
 
   return (
     <div className="flex flex-row">
       <Modal>
         <Sidebar />
+        <div className="flex flex-col flex-1">
+        <Header/>
         <Main>
-          {selectedColumn?.title}
+
         </Main>
+        </div>
       </Modal>
     </div>
   )
