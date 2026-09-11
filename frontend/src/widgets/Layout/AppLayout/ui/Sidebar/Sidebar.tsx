@@ -15,7 +15,7 @@ function Sidebar() {
   return (
     <>
     {sidebarState? (
-    <aside className={`w-1/5 flex flex-col justify-between ${isDark? "bg-white" : "bg-dark"}`}>
+    <aside className={`w-1/5 flex flex-col border-r ${isDark? "border-r-accent3" : "border-r-accent2-hover"} justify-between ${isDark? "bg-white" : "bg-dark"}`}>
       <div className="flex flex-col gap-20">
         <SidebarHeader />
         {auth.user && <SidebarColumns userId={auth.user.id}/>}
