@@ -11,7 +11,7 @@ import type { Column } from "@/features/columns/model/column.types";
 
 function SidebarColumns({ userId }:{userId:number}) {
 
-  const { data, loading, error, addColumn } = useColumns(userId)
+  const { data, loading, error, addColumn, updateColumn } = useColumns(userId)
   const { selectedColumn, setSelectedColumn } = useAppContext();
   const [activeColumn, setActiveColumn] = useState<number>(1)
   const { openModal } = useModal()
@@ -28,6 +28,12 @@ function SidebarColumns({ userId }:{userId:number}) {
       setActiveColumn(data[0].id);
     }
   }, [loading, data, selectedColumn, setSelectedColumn])
+
+  useEffect(() => {
+    if (selectedColumn) {
+      updateColumn(selectedColumn)
+    }
+  }, [selectedColumn, updateColumn])
 
   if (error) {
     return <div>{error}</div>;
