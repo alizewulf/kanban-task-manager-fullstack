@@ -1,5 +1,5 @@
 import type { Request, Response } from "express"
-import { getColumns, createColumn } from "./column.service.js"
+import { getColumns, createColumn, updateColumn } from "./column.service.js"
 
 export async function getColumnsController(req: Request, res: Response) {
   try {
@@ -46,6 +46,36 @@ export async function createColumnController(req: Request, res: Response) {
 
     res.status(500).json({
       message: "Failed to create column"
+    })
+  }
+}
+
+export async function updateColumnController(
+  req: Request,
+  res: Response
+) {
+  try {
+    const columnId = Number(req.params.id)
+
+    if (Number.isNaN(columnId)) {
+      return res.status(400).json({
+        message: "Invalid column ID"
+      })
+    }
+
+    const { title } = req.body
+
+    const column = await updateColumn(
+      columnId,
+      title
+    )
+
+    res.status(200).json(column)
+  } catch (error) {
+    console.error(error)
+
+    res.status(500).json({
+      message: "Failed to update column"
     })
   }
 }

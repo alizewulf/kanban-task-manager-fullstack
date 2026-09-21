@@ -40,3 +40,20 @@ export async function createColumn(
 
   return result.rows[0]
 }
+
+export async function updateColumn(
+  columnId: number,
+  title: string
+) {
+  const result = await pool.query(
+    `
+      UPDATE columns
+      SET title = $1
+      WHERE id = $2
+      RETURNING *
+    `,
+    [title, columnId]
+  )
+
+  return result.rows[0]
+}
