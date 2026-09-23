@@ -15,7 +15,7 @@ function CreateColumnModal({ onCreated }: CreateColumnModalProps) {
   const auth = useSelector((state: RootState) => state.auth)
   return (
     <div className="flex flex-col gap-6 font-jakarta">
-      <h2 className={`${textStyles.heading.lg} text-black`}>Add New Board</h2>
+      <h2 className={`${textStyles.heading.lg} text-inherit`}>Add New Board</h2>
 
       <Formik initialValues={{
         title: "",
