@@ -1,3 +1,4 @@
+import CreateTaskColumnButton from "@/features/createTaskColumn";
 import type { TaskCategory } from "@/features/taskCategories/model/category.types";
 import textStyles from "@/shared/typography/typography";
 
@@ -11,9 +12,7 @@ function MainContent({data}:{data:TaskCategory[]}) {
         </div>
       ))}
 
-      <div className={`flex px-13.75 h-full items-center outline-[#AFB6B9] ${textStyles.heading.xl} text-accent3-hover bg-linear-to-r from-[#2B2C37] to-[#2B2C37]/50`}>
-        <button className="appearance-none h-full w-full">+ New Column</button>
-      </div>
+      <CreateTaskColumnButton/>
     </div>
   )
 }
