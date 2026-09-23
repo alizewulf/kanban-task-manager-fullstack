@@ -1,4 +1,4 @@
-import { API_LINK } from "../../shared/config/api.config";
+import { API_LINK } from "../../shared/config/api/api.config";
 
 const USERS_API = `${API_LINK}/users`
 

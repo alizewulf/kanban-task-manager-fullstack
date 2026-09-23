@@ -1,5 +1,5 @@
 import axios from "axios"
-import { COLUMN_LINK } from "../config/columns.config"
+import { COLUMN_LINK } from "../../../shared/config/api/columns.config"
 import type { Column } from "./column.types"
 
 export default async function createColumn(

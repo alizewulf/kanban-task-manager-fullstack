@@ -1,4 +1,4 @@
-import { COLUMN_LINK } from "../config/columns.config";
+import { COLUMN_LINK } from "../../../shared/config/api/columns.config";
 import type { Column } from "./column.types";
 
 export default async function getColumns(userId: number): Promise<Column[]> {

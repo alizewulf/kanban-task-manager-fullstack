@@ -1,4 +1,4 @@
-import { COLUMN_LINK } from "@/features/columns/config/columns.config";
+import { COLUMN_LINK } from "@/shared/config/api/columns.config";
 import axios from "axios";
 
 const handleSubmit = async (
