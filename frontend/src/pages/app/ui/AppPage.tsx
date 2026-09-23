@@ -4,7 +4,7 @@ import Modal from "@/shared/ui/modal";
 import { useEffect, useState } from "react";
 import type { TaskCategory } from "@/features/taskCategories/model/category.types";
 import { getCategories } from "@/features/taskCategories/model/getCategories";
-import MainContent from "@/widgets/Layout/AppLayout/ui/MainContent";
+import MainContent from "@/widgets/Layout/AppLayout/ui/MainContent/";
 import { useAppContext } from "@/shared/context/app.context";
 
 function AppPage() {
