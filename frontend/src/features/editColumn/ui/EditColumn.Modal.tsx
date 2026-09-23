@@ -1,26 +1,18 @@
-import { COLUMN_LINK } from "@/features/columns/config/columns.config"
 import { useAppContext } from "@/shared/context/app.context"
 import textStyles from "@/shared/typography/typography"
 import { useModal } from "@/shared/ui/modal/useModal"
-import axios from "axios"
 import { useState } from "react"
+import handleSubmit from "../model/handleSubmit"
 
 function EditColumnModal() {
-  const { selectedColumn, setSelectedColumn } = useAppContext()
+  const { selectedColumn, setSelectedColumn } = useAppContext();
+
   const [inputState, setInput] = useState(
     selectedColumn?.title ?? ""
-  )
-  const { closeModal } = useModal()
-  const handleSubmit = async () => {
-    const response = await axios.patch(
-      `${COLUMN_LINK}/${selectedColumn?.id}`,
-      {
-        title: inputState
-      }
-    )
+  );
 
-    setSelectedColumn(response.data)
-  }
+  const { closeModal } = useModal();
+
   return (
     <div className="flex flex-col gap-6">
       <h3 className={`${textStyles.heading.lg}`}>
@@ -39,10 +31,18 @@ function EditColumnModal() {
           className="outline outline-accent3-hover"
         />
 
-        <button type="button" onClick={async () => {
-          await handleSubmit()
-          closeModal()
-        }}>
+        <button
+          type="button"
+          onClick={async () => {
+            const updatedColumn = await handleSubmit(
+              inputState,
+              selectedColumn!.id
+            );
+
+            setSelectedColumn(updatedColumn);
+            closeModal();
+          }}
+        >
           Save
         </button>
       </div>
