@@ -5,20 +5,26 @@ import { useEffect, useState } from "react";
 import type { TaskCategory } from "@/features/taskCategories/model/category.types";
 import { getCategories } from "@/features/taskCategories/model/getCategories";
 import MainContent from "@/widgets/Layout/AppLayout/ui/MainContent";
+import { useAppContext } from "@/shared/context/app.context";
 
 function AppPage() {
   const [data, setData] = useState<TaskCategory[]>([]);
+  const { selectedColumn } = useAppContext()
 
   useEffect(() => {
     const loadCategories = async () => {
-      const categories = await getCategories(1);
+      if (!selectedColumn) {
+        setData([]);
+        return;
+      }
+
+      const categories = await getCategories(selectedColumn.id);
 
       setData(categories);
-      console.log(categories)
     };
 
     loadCategories();
-  }, []);
+  }, [selectedColumn]);
 
   return (
     <div className="flex flex-row">
@@ -29,7 +35,7 @@ function AppPage() {
           <Header />
           <Main>
             {data.length >= 1 ? (
-              <MainContent data={data}/>
+              <MainContent data={data} />
             ) : (
               <EmptyBoardContent />
             )}
