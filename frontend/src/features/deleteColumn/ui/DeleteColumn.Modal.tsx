@@ -5,7 +5,7 @@ import { useModal } from "@/shared/ui/modal/useModal"
 import deleteColumn from "../model/deleteColumn"
 
 function DeleteColumnModal() {
-  const {selectedColumn} = useAppContext()
+  const {selectedColumn, removeColumn} = useAppContext()
   const {closeModal} = useModal()
   
   if (!selectedColumn) {
@@ -20,8 +20,9 @@ function DeleteColumnModal() {
           This action will remove all columns and tasks and cannot be reversed.
         </div>
         <div className="flex gap-3">
-          <Button className="w-1/2" variant="destructive" onClick={() => {
-            deleteColumn(selectedColumn.id)
+          <Button className="w-1/2" variant="destructive" onClick={async () => {
+            await deleteColumn(selectedColumn.id)
+            removeColumn(selectedColumn.id)
             closeModal()
             }}>Delete</Button>
           <Button className="w-1/2" variant="secondary" onClick={() => closeModal()}>Cancel</Button>

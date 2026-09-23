@@ -28,6 +28,13 @@ function useColumns(userId: number) {
         }))
     }, [])
 
+    const removeColumn = useCallback((columnId: number) => {
+        setState(prev => ({
+            ...prev,
+            data: prev.data.filter(column => column.id !== columnId)
+        }))
+    }, [])
+
     useEffect(() => {
         async function fetchColumns() {
             try {
@@ -54,7 +61,7 @@ function useColumns(userId: number) {
         }
         fetchColumns()
     },[userId])
-    return { ...state, addColumn, updateColumn }
+    return { ...state, addColumn, updateColumn, removeColumn }
 }
 
 export default useColumns

@@ -9,6 +9,8 @@ import type { Column } from "../../features/columns/model/column.types";
 interface AppContextValue {
     selectedColumn: Column | null;
     setSelectedColumn: (column: Column | null) => void;
+    removeColumn: (columnId: number) => void;
+    setRemoveColumn: (removeColumn: (columnId: number) => void) => void;
 }
 
 const AppContext = createContext<AppContextValue | null>(null);
@@ -20,12 +22,16 @@ export function AppProvider({
 }) {
     const [selectedColumn, setSelectedColumn] =
         useState<Column | null>(null);
+    const [removeColumn, setRemoveColumn] =
+        useState<(columnId: number) => void>(() => {});
 
     return (
         <AppContext.Provider
             value={{
                 selectedColumn,
-                setSelectedColumn
+                setSelectedColumn,
+                removeColumn,
+                setRemoveColumn
             }}
         >
             {children}

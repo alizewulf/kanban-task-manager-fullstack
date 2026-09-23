@@ -4,15 +4,15 @@ import AbstractIcon, { iconFillColors } from "./icons/AbstractIcon";
 import { useAppContext } from "@/shared/context/app.context";
 import { useState, useEffect } from "react";
 import ColumnSkeleton from "./Column.Skeleton";
-import CreateColumnButton from "@/features/columns/ui/CreateColumnButton";
+import CreateColumnButton from "@/features/columns/ui/CreateColumn.Button";
 import { useModal } from "@/shared/ui/modal/useModal";
-import CreateColumnModal from "@/features/columns/ui/CreateColumnModal";
+import CreateColumnModal from "@/features/columns/ui/CreateColumn.Modal";
 import type { Column } from "@/features/columns/model/column.types";
 
 function SidebarColumns({ userId }:{userId:number}) {
 
-  const { data, loading, error, addColumn, updateColumn } = useColumns(userId)
-  const { selectedColumn, setSelectedColumn } = useAppContext();
+  const { data, loading, error, addColumn, updateColumn, removeColumn: removeColumnFromState } = useColumns(userId)
+  const { selectedColumn, setSelectedColumn, setRemoveColumn } = useAppContext();
   const [activeColumn, setActiveColumn] = useState<number>(1)
   const { openModal } = useModal()
 
@@ -34,6 +34,14 @@ function SidebarColumns({ userId }:{userId:number}) {
       updateColumn(selectedColumn)
     }
   }, [selectedColumn, updateColumn])
+
+  useEffect(() => {
+    setRemoveColumn(() => (columnId: number) => {
+      setSelectedColumn(null)
+      setActiveColumn(0)
+      removeColumnFromState(columnId)
+    })
+  }, [removeColumnFromState, setRemoveColumn, setSelectedColumn])
 
   if (error) {
     return <div>{error}</div>;
