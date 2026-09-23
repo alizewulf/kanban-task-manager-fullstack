@@ -57,3 +57,16 @@ export async function updateColumn(
 
   return result.rows[0]
 }
+
+export async function deleteColumn(columnId: number) {
+  const result = await pool.query(
+    `
+      DELETE FROM columns
+      WHERE id = $1
+      RETURNING *
+    `,
+    [columnId]
+  )
+
+  return result.rows[0]
+}

@@ -1,5 +1,5 @@
 import type { Request, Response } from "express"
-import { getColumns, createColumn, updateColumn } from "./column.service.js"
+import { getColumns, createColumn, updateColumn, deleteColumn } from "./column.service.js"
 
 export async function getColumnsController(req: Request, res: Response) {
   try {
@@ -76,6 +76,31 @@ export async function updateColumnController(
 
     res.status(500).json({
       message: "Failed to update column"
+    })
+  }
+}
+
+export async function deleteColumnController(
+  req: Request,
+  res: Response
+) {
+  try {
+    const columnId = Number(req.params.id)
+
+    if (Number.isNaN(columnId)) {
+      return res.status(400).json({
+        message: "Invalid column ID"
+      })
+    }
+
+    await deleteColumn(columnId)
+
+    res.status(200).json({ message: "Column deleted successfully" })
+  } catch (error) {
+    console.error(error)
+
+    res.status(500).json({
+      message: "Failed to delete column"
     })
   }
 }
