@@ -2,7 +2,12 @@ import CreateTaskColumnButton from "@/features/createTaskColumn";
 import type { TaskCategory } from "@/features/taskCategories/model/category.types";
 import textStyles from "@/shared/typography/typography";
 
-function MainContent({data}:{data:TaskCategory[]}) {
+interface MainContentProps {
+  data: TaskCategory[]
+  onCategoryCreated: (category: TaskCategory) => void
+}
+
+function MainContent({data, onCategoryCreated}: MainContentProps) {
   return (
     <div className="flex gap-6 pt-6 pl-6">
       {data.map(task_category => (
@@ -12,7 +17,7 @@ function MainContent({data}:{data:TaskCategory[]}) {
         </div>
       ))}
 
-      <CreateTaskColumnButton/>
+      <CreateTaskColumnButton onCreated={onCategoryCreated}/>
     </div>
   )
 }

@@ -35,9 +35,14 @@ function AppPage() {
           <Header />
           <Main>
             {data.length >= 1 ? (
-              <MainContent data={data} />
+              <MainContent
+                data={data}
+                onCategoryCreated={(category) => setData((current) => [...current, category])}
+              />
             ) : (
-              <EmptyBoardContent />
+              <EmptyBoardContent
+                onCategoryCreated={(category) => setData((current) => [...current, category])}
+              />
             )}
           </Main>
         </div>
