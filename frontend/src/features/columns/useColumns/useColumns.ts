@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import type { Column } from "../model/column.types"
 import getColumns from "../model/getColumns"
 
@@ -21,6 +21,13 @@ function useColumns(userId: number) {
         }))
     }
 
+    const updateColumn = useCallback((column: Column) => {
+        setState(prev => ({
+            ...prev,
+            data: prev.data.map(item => item.id === column.id ? column : item)
+        }))
+    }, [])
+
     useEffect(() => {
         async function fetchColumns() {
             try {
@@ -37,7 +44,7 @@ function useColumns(userId: number) {
                     loading: false,
                     error: null
                 }))
-            } catch (error) {
+            } catch {
                 setState(prev => ({
                     ...prev,
                     loading: false,
@@ -47,7 +54,7 @@ function useColumns(userId: number) {
         }
         fetchColumns()
     },[userId])
-    return { ...state, addColumn }
+    return { ...state, addColumn, updateColumn }
 }
 
 export default useColumns
