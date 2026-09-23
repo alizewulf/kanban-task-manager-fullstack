@@ -1,5 +1,5 @@
 import axios from "axios";
-import USERS_API from "../../../../entities/users/users.config";
+import USERS_API from "../../../../shared/config/api/users.config";
 import type { User } from "../../../../entities/users/interface";
 
 
