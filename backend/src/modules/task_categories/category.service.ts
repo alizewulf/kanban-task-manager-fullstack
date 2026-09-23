@@ -1,4 +1,5 @@
 import { pool } from "../../database/database.js";
+import { generateColor } from "../../utils/generateColor.js";
 
 export async function getCategories(columnId: number) {
   const result = await pool.query(
@@ -29,20 +30,24 @@ export async function createCategory(
 
   const position = positionResult.rows[0].position;
 
+  const color = generateColor();
+
   const result = await pool.query(
     `
       INSERT INTO task_categories (
         column_id,
         title,
-        position
+        position,
+        color
       )
-      VALUES ($1, $2, $3)
+      VALUES ($1, $2, $3, $4)
       RETURNING *
     `,
     [
       columnId,
       title,
-      position
+      position,
+      color
     ]
   );
 

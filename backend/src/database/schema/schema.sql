@@ -15,5 +15,6 @@ CREATE TABLE task_categories (
   id SERIAL PRIMARY KEY,
   column_id INTEGER NOT NULL REFERENCES columns(id) ON DELETE CASCADE,
   title VARCHAR(255) NOT NULL,
-  position INTEGER NOT NULL
+  position INTEGER NOT NULL,
+  color VARCHAR(7) NOT NULL
 );
