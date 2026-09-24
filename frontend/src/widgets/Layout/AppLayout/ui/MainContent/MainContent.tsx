@@ -25,7 +25,6 @@ interface TaskCardProps {
 
 function TaskCard({ task, taskSubtasks, isDark, onOpen }: TaskCardProps) {
   const completedSubtasks = taskSubtasks.filter((item) => item.completed).length;
-  const shouldShowSubtaskSummary = taskSubtasks.length > 0;
 
   return (
     <div
@@ -37,11 +36,9 @@ function TaskCard({ task, taskSubtasks, isDark, onOpen }: TaskCardProps) {
         {task.title}
       </p>
 
-      {shouldShowSubtaskSummary && (
-        <p className={`text-accent3-hover ${textStyles.heading.md} transition-all duration-200 group-hover:text-primary group-hover:translate-x-1`}>
-          {completedSubtasks} of {taskSubtasks.length} subtasks completed
-        </p>
-      )}
+      <p className={`text-accent3-hover ${textStyles.heading.md} transition-all duration-200 group-hover:text-primary group-hover:translate-x-1`}>
+        {completedSubtasks} of {taskSubtasks.length} subtasks completed
+      </p>
     </div>
   );
 }
