@@ -4,6 +4,7 @@ import usersRouter from "../modules/users/users.routes.js";
 import columnsRouter from '../modules/columns/column.route.js'
 import { server_config } from "../config/config.js";
 import categoryRouter from "../modules/task_categories/category.route.js";
+import taskRouter from "../modules/tasks/task.route.js";
 
 function startServer() {
     const app = express();
@@ -18,7 +19,8 @@ function startServer() {
     app.use("/users", usersRouter);
     app.use("/columns", columnsRouter)
     app.use("/columns", categoryRouter)
-    
+    app.use("/", taskRouter);
+
     app.listen(server_config.port, () => {
         console.log(
             `Server is running on ${server_config.host}:${server_config.port}`,

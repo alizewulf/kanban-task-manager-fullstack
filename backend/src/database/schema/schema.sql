@@ -18,3 +18,11 @@ CREATE TABLE task_categories (
   position INTEGER NOT NULL,
   color VARCHAR(7) NOT NULL
 );
+
+CREATE TABLE tasks (
+  id SERIAL PRIMARY KEY,
+  category_id INTEGER NOT NULL REFERENCES task_categories(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  description TEXT,
+  position INTEGER NOT NULL
+);
