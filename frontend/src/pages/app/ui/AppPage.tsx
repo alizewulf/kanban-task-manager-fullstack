@@ -32,7 +32,10 @@ function AppPage() {
         <Sidebar />
 
         <div className="flex flex-col flex-1 max-h-screen">
-          <Header />
+          <Header
+            categories={data}
+            onCategoriesChange={setData}
+          />
           <Main>
             {data.length >= 1 ? (
               <MainContent
