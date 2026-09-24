@@ -6,6 +6,7 @@ import createBoardWithFields from "../model/createBoardWithFields"
 import { useSelector } from "react-redux"
 import type { RootState } from "@/store/store"
 import type { Column } from "../model/column.types"
+import RemoveIcon from "./X.Icon"
 
 interface CreateColumnModalProps {
   onCreated: (column: Column) => void
@@ -14,6 +15,8 @@ interface CreateColumnModalProps {
 function CreateColumnModal({ onCreated }: CreateColumnModalProps) {
   const { closeModal } = useModal()
   const auth = useSelector((state: RootState) => state.auth)
+  const theme = useSelector((state:RootState) => state.theme.theme)
+  const isDark = theme === "dark"
 
   return (
     <div className="flex flex-col gap-6 font-jakarta">
@@ -55,33 +58,33 @@ function CreateColumnModal({ onCreated }: CreateColumnModalProps) {
         {({ errors, touched, status, isSubmitting, values }) => (
           <Form className="flex flex-col gap-6">
             <div className="flex gap-2 flex-col">
-              <label htmlFor="board-title" className={`${textStyles.body.md} text-accent3-hover font-bold`}>Board Name</label>
-              <Field id="board-title" name="title" type="text" placeholder="e.g. Web Design" />
+              <label htmlFor="board-title" className={`${textStyles.body.md} text-accent3-hover font-bold!`}>Name</label>
+              <Field id="board-title" className={`outline outline-accent3-hover py-2 px-4 placeholder:${textStyles.body.lg} placeholder:text-black/25`} name="title" type="text" placeholder="e.g. Web Design" />
               {touched.title && errors.title && <span className="text-sm text-red-400">{errors.title}</span>}
             </div>
 
             <FieldArray name="fields">
               {({ push, remove }) => (
                 <div className="flex flex-col gap-3">
-                  <span className={`${textStyles.body.md} text-accent3-hover font-bold`}>Fields</span>
+                  <span className={`${textStyles.body.md} text-accent3-hover font-bold!`}>Columns</span>
                   {values.fields.map((_, index) => (
                     <div key={index} className="flex gap-2 items-center">
-                      <Field name={`fields.${index}`} type="text" placeholder="e.g. To Do" />
+                      <Field name={`fields.${index}`} type="text" className={`px-4 py-2 outline outline-accent3-hover ${textStyles.body.lg} ${isDark? "placeholder:text-black text-black!":"placeholder:text-white! text-white"}`} placeholder="e.g. To Do" />
                       <button
                         type="button"
                         onClick={() => remove(index)}
-                        className="text-sm text-red-400 hover:text-red-300 font-bold"
+                        className="w-3.5 h-3.5"
                       >
-                        Remove
+                        <RemoveIcon/>
                       </button>
                     </div>
                   ))}
                   <button
                     type="button"
                     onClick={() => push("")}
-                    className={`${textStyles.body.md} text-primary hover:text-primary-hover font-bold self-start`}
+                    className={`${textStyles.body.md} bg-white text-primary py-2 font-bold! rounded-[20px] h-10`}
                   >
-                    + Add Field
+                    + Add New Column
                   </button>
                 </div>
               )}
@@ -93,7 +96,7 @@ function CreateColumnModal({ onCreated }: CreateColumnModalProps) {
               type="submit"
               size="sm"
               disabled={isSubmitting}
-              className="w-full"
+              className="w-full font-bold!"
             >
               {isSubmitting ? "Creating..." : "Create New Board"}
             </Button>

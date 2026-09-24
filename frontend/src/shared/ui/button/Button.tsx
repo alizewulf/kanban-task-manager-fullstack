@@ -17,7 +17,7 @@ export type ButtonVariants = "primary" | "secondary" | "destructive";
 
 function Button({ children, onClick, variant = "primary", size = "lg", className = "", style, type = "button", disabled = false }: ButtonProps) {
   const buttonClassName = `${ButtonvariantStyles[variant]} rounded-full border border-transparent transition-all duration-200`;
-
+  
   return (
     <button
       type={type}
