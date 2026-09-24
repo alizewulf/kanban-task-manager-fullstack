@@ -1,8 +1,8 @@
 import textStyles from "@/shared/typography/typography"
+import Button from "@/shared/ui/button/Button"
 import { useModal } from "@/shared/ui/modal/useModal"
 import { Field, FieldArray, Formik, Form } from "formik"
-import createColumn from "../model/createColumn"
-import createTaskCategory from "@/features/createTaskColumn/model/createTaskCategory"
+import createBoardWithFields from "../model/createBoardWithFields"
 import { useSelector } from "react-redux"
 import type { RootState } from "@/store/store"
 import type { Column } from "../model/column.types"
@@ -40,11 +40,10 @@ function CreateColumnModal({ onCreated }: CreateColumnModalProps) {
           }
 
           try {
-            const column = await createColumn(auth.user.id, value.title.trim())
-            await Promise.all(
+            const column = await createBoardWithFields(
+              auth.user.id,
+              value.title,
               value.fields
-                .filter((field) => field.trim())
-                .map((field) => createTaskCategory(column.id, field.trim()))
             )
             onCreated(column)
             closeModal()
@@ -90,13 +89,14 @@ function CreateColumnModal({ onCreated }: CreateColumnModalProps) {
 
             {status && <span className="text-sm text-red-400">{status}</span>}
 
-            <button
+            <Button
               type="submit"
+              size="sm"
               disabled={isSubmitting}
-              className={`${textStyles.body.lg} text-white font-bold leading-5.75 py-2 bg-primary hover:bg-primary-hover disabled:opacity-50 rounded-[20px]`}
+              className="w-full"
             >
               {isSubmitting ? "Creating..." : "Create New Board"}
-            </button>
+            </Button>
           </Form>
         )}
 
