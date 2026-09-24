@@ -6,7 +6,7 @@ import createBoardWithFields from "../model/createBoardWithFields"
 import { useSelector } from "react-redux"
 import type { RootState } from "@/store/store"
 import type { Column } from "../model/column.types"
-import RemoveIcon from "./X.Icon"
+import RemoveIcon from "@/shared/ui/icons/RemoveIcon"
 
 interface CreateColumnModalProps {
   onCreated: (column: Column) => void

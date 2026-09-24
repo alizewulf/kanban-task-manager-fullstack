@@ -9,6 +9,9 @@ import textStyles from "@/shared/typography/typography"
 import { useAppContext } from "@/shared/context/app.context"
 import { useModal } from "@/shared/ui/modal/useModal"
 import updateBoard from "../model/handleSubmit"
+import { useSelector } from "react-redux"
+import type { RootState } from "@/store/store"
+import RemoveIcon from "@/shared/ui/icons/RemoveIcon"
 
 interface EditColumnModalProps {
   categories: TaskCategory[]
@@ -23,6 +26,8 @@ interface EditBoardValues {
 function EditColumnModal({ categories, onCategoriesChange }: EditColumnModalProps) {
   const { selectedColumn, setSelectedColumn } = useAppContext()
   const { closeModal } = useModal()
+  const theme = useSelector((state: RootState) => state.theme.theme)
+  const isDark = theme === "dark"
 
   if (!selectedColumn) {
     return null
@@ -35,7 +40,7 @@ function EditColumnModal({ categories, onCategoriesChange }: EditColumnModalProp
 
   return (
     <div className="flex flex-col gap-6 font-jakarta">
-      <h3 className={`${textStyles.heading.lg} text-inherit`}>Edit Board</h3>
+      <h2 className={`${textStyles.heading.lg} text-inherit`}>Edit Board</h2>
 
       <Formik
         initialValues={initialValues}
@@ -81,18 +86,19 @@ function EditColumnModal({ categories, onCategoriesChange }: EditColumnModalProp
       >
         {({ errors, touched, status, isSubmitting, values }) => (
           <Form className="flex flex-col gap-6">
-            <div className="flex flex-col gap-2">
+            <div className="flex gap-2 flex-col">
               <label
                 htmlFor="edit-board-title"
-                className={`${textStyles.body.md} text-accent3-hover font-bold`}
+                className={`${textStyles.body.md} text-accent3-hover font-bold!`}
               >
-                Board Name
+                Name
               </label>
               <Field
                 id="edit-board-title"
                 name="title"
                 type="text"
-                className="rounded border border-accent3-hover bg-transparent px-3 py-2"
+                placeholder="e.g. Web Design"
+                className={`outline outline-accent3-hover py-2 px-4 placeholder:${textStyles.body.lg}`}
               />
               {touched.title && errors.title && (
                 <span className="text-sm text-red-400">{errors.title}</span>
@@ -103,26 +109,36 @@ function EditColumnModal({ categories, onCategoriesChange }: EditColumnModalProp
               {({ push, remove }) => (
                 <div className="flex flex-col gap-3">
                   <span className={`${textStyles.body.md} text-accent3-hover font-bold`}>
-                    Fields
+                    Columns
                   </span>
                   {values.fields.map((field, index) => (
                     <div key={field.id ?? `new-${index}`} className="flex flex-col gap-2">
-                      <div className="flex gap-2">
+                      <div className="flex gap-4 items-center">
                         <Field
                           name={`fields.${index}.title`}
                           type="text"
                           placeholder="e.g. To Do"
-                          className="min-w-0 flex-1 rounded border border-accent3-hover bg-transparent px-3 py-2"
+                          className={`min-w-0 flex-1 px-4 py-2 outline outline-accent3-hover ${textStyles.body.lg} ${isDark ? "placeholder:text-black text-black!" : "placeholder:text-white! text-white"}`}
                         />
-                        {!field.id && (
-                          <button
-                            type="button"
-                            onClick={() => remove(index)}
-                            className="text-sm font-bold text-red-400 hover:text-red-300"
-                          >
-                            Remove
-                          </button>
-                        )}
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            if (!field.id) {
+                              remove(index)
+                              return
+                            }
+
+                            await deleteCategory(selectedColumn.id, field.id)
+                            onCategoriesChange(
+                              categories.filter((category) => category.id !== field.id)
+                            )
+                            remove(index)
+                          }}
+                          aria-label={`Delete ${field.title || "column"}`}
+                          className="w-3.5 h-3.5"
+                        >
+                          <RemoveIcon />
+                        </button>
                       </div>
                       {typeof errors.fields?.[index] !== "string" &&
                         errors.fields?.[index]?.title && (
@@ -130,29 +146,14 @@ function EditColumnModal({ categories, onCategoriesChange }: EditColumnModalProp
                           {errors.fields[index]?.title}
                         </span>
                       )}
-                      {field.id && (
-                        <button
-                          type="button"
-                          onClick={async () => {
-                            await deleteCategory(selectedColumn.id, field.id!)
-                            onCategoriesChange(
-                              categories.filter((category) => category.id !== field.id)
-                            )
-                            remove(index)
-                          }}
-                          className="self-start text-sm font-bold text-danger hover:text-danger/80"
-                        >
-                          Delete Field
-                        </button>
-                      )}
                     </div>
                   ))}
                   <button
                     type="button"
                     onClick={() => push({ title: "" })}
-                    className={`${textStyles.body.md} self-start font-bold text-primary hover:text-primary-hover`}
+                    className={`${textStyles.body.md} bg-white text-primary py-2 font-bold! rounded-[20px] h-10`}
                   >
-                    + Add Field
+                    + Add New Column
                   </button>
                 </div>
               )}
@@ -160,7 +161,7 @@ function EditColumnModal({ categories, onCategoriesChange }: EditColumnModalProp
 
             {status && <span className="text-sm text-red-400">{status}</span>}
 
-            <Button type="submit" size="sm" disabled={isSubmitting} className="w-full">
+            <Button type="submit" size="sm" disabled={isSubmitting} className="w-full font-bold!">
               {isSubmitting ? "Saving..." : "Save Changes"}
             </Button>
           </Form>
