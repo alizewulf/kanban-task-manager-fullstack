@@ -13,6 +13,7 @@ interface CreateColumnModalProps {
 function CreateColumnModal({ onCreated }: CreateColumnModalProps) {
   const { closeModal } = useModal()
   const auth = useSelector((state: RootState) => state.auth)
+
   return (
     <div className="flex flex-col gap-6 font-jakarta">
       <h2 className={`${textStyles.heading.lg} text-inherit`}>Add New Board</h2>
