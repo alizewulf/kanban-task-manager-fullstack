@@ -53,3 +53,34 @@ export async function createCategory(
 
   return result.rows[0];
 }
+
+export async function updateCategory(
+  columnId: number,
+  categoryId: number,
+  title: string
+) {
+  const result = await pool.query(
+    `
+      UPDATE task_categories
+      SET title = $1
+      WHERE id = $2 AND column_id = $3
+      RETURNING *
+    `,
+    [title, categoryId, columnId]
+  );
+
+  return result.rows[0];
+}
+
+export async function deleteCategory(columnId: number, categoryId: number) {
+  const result = await pool.query(
+    `
+      DELETE FROM task_categories
+      WHERE id = $1 AND column_id = $2
+      RETURNING *
+    `,
+    [categoryId, columnId]
+  );
+
+  return result.rows[0];
+}
