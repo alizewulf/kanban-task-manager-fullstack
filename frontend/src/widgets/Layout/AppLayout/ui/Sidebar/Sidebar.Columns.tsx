@@ -23,13 +23,9 @@ function SidebarColumns({ userId }:{userId:number}) {
   }
 
   useEffect(() => {
-    if (!loading && data.length > 0) {
-      const firstColumn = data[0];
-
-      if (!selectedColumn || selectedColumn.id !== firstColumn.id) {
-        setSelectedColumn(firstColumn);
-        setActiveColumn(firstColumn.id);
-      }
+    if (!loading && data.length > 0 && !selectedColumn) {
+      setSelectedColumn(data[0]);
+      setActiveColumn(data[0].id);
     }
   }, [loading, data, selectedColumn, setSelectedColumn])
 
