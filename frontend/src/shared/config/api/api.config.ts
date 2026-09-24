@@ -23,6 +23,9 @@ export interface ApiConfig {
 		list: (categoryId: number) => string
         create: (categoryId: number) => string
 	}
+	subtasks: {
+		list: (taskId: number) => string
+	}
 }
 
 const API_BASE_URL = "http://localhost:3000"
@@ -53,5 +56,8 @@ export const api: ApiConfig = {
 	tasks: {
 		list: (categoryId) => `${API_BASE_URL}/categories/${categoryId}/tasks`,
         create: (categoryId) => `${API_BASE_URL}/categories/${categoryId}/tasks`
+	},
+	subtasks: {
+		list: (taskId) => `${API_BASE_URL}/tasks/${taskId}/subtasks`,
 	},
 }

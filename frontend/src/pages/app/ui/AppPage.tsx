@@ -5,7 +5,7 @@ import MainContent from "@/widgets/Layout/AppLayout/ui/MainContent/";
 import { useAppContext } from "@/shared/context/app.context";
 
 function AppPage() {
-  const { categories, setCategories } = useAppContext();
+  const { selectedColumn, setCategories } = useAppContext();
 
   return (
     <div className="flex flex-row">
@@ -15,7 +15,7 @@ function AppPage() {
         <div className="flex flex-col flex-1 max-h-screen">
           <Header />
           <Main>
-            {categories.length >= 1 ? (
+            {selectedColumn ? (
               <MainContent
                 onCategoryCreated={(category) => setCategories((current) => [...current, category])}
               />
