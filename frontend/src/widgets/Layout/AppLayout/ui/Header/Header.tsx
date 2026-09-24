@@ -48,7 +48,7 @@ function Header({ categories, onCategoriesChange }: HeaderProps) {
             <button className="w-10 h-10 flex items-center justify-center" onClick={() => setDropdown(prev => !prev)}><ThreeDotsIcon/></button>
             {renderDropdown && (
               <>
-              <div className="absolute py-4 top-15 right-10 flex flex-col gap-4 items-start ">
+              <div className={`absolute py-4 top-15 right-10 flex flex-col gap-4 items-start rounded-lg ${isDark? "bg-white!": "bg-very-darkbg"}`}>
                 <EditColumnButton onClick={handleEditColumn}/>
                 <DeleteColumnButton onClick={handleRemoveColumn}/>
               </div>
