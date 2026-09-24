@@ -1,6 +1,6 @@
 import axios from "axios"
 
-import { CATEGORY_LINK } from "@/shared/config/api/category.config"
+import { api } from "@/shared/config/api/api.config"
 import type { TaskCategory } from "./category.types"
 
 export default async function updateCategory(
@@ -9,7 +9,7 @@ export default async function updateCategory(
   title: string
 ): Promise<TaskCategory> {
   const response = await axios.patch(
-    `${CATEGORY_LINK}/${columnId}/categories/${categoryId}`,
+    api.categories.update(columnId, categoryId),
     { title }
   )
 

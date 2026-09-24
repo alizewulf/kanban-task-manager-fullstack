@@ -1,9 +1,9 @@
-import { COLUMN_LINK } from "../../../shared/config/api/columns.config";
+import { api } from "../../../shared/config/api/api.config";
 import type { Column } from "./column.types";
 
 export default async function getColumns(userId: number): Promise<Column[]> {
     try {
-        const response = await fetch(`${COLUMN_LINK}/${userId}`)
+        const response = await fetch(api.columns.list(userId))
         if (!response) {
             throw new Error("Failed to fetch columns!")
         }

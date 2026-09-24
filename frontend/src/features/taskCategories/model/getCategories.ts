@@ -1,13 +1,13 @@
 import axios from "axios";
 
-import { CATEGORY_LINK } from "@/shared/config/api/category.config";
+import { api } from "@/shared/config/api/api.config";
 import type { TaskCategory } from "./category.types";
 
 export async function getCategories(
   columnId: number
 ): Promise<TaskCategory[]> {
   const response = await axios.get(
-    `${CATEGORY_LINK}/${columnId}/categories`
+    api.categories.list(columnId)
   );
 
   return response.data;

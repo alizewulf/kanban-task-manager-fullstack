@@ -1,8 +1,8 @@
-import { COLUMN_LINK } from "@/shared/config/api/columns.config";
+import { api } from "@/shared/config/api/api.config";
 import axios from "axios";
 
 function deleteColumn(columnId: number): Promise<void> {
-  return axios.delete(`${COLUMN_LINK}/${columnId}`)
+  return axios.delete(api.columns.delete(columnId))
     .then(() => {
       console.log(`Column with ID ${columnId} deleted successfully.`);
     })

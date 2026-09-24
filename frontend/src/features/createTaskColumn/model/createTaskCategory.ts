@@ -1,6 +1,6 @@
 import axios from "axios"
 
-import { CATEGORY_LINK } from "@/shared/config/api/category.config"
+import { api } from "@/shared/config/api/api.config"
 import type { TaskCategory } from "@/features/taskCategories/model/category.types"
 
 export default async function createTaskCategory(
@@ -9,7 +9,7 @@ export default async function createTaskCategory(
 ): Promise<TaskCategory> {
   try {
     const response = await axios.post(
-      `${CATEGORY_LINK}/${columnId}/categories`,
+      api.categories.create(columnId),
       { title }
     )
 

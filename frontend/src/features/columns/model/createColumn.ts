@@ -1,5 +1,5 @@
 import axios from "axios"
-import { COLUMN_LINK } from "../../../shared/config/api/columns.config"
+import { api } from "../../../shared/config/api/api.config"
 import type { Column } from "./column.types"
 
 export default async function createColumn(
@@ -8,7 +8,7 @@ export default async function createColumn(
 ): Promise<Column> {
   try {
     const response = await axios.post(
-      `${COLUMN_LINK}/${userId}`,
+      api.columns.create(userId),
       { title: columnName }
     )
 

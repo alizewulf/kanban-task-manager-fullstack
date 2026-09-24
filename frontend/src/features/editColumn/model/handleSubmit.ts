@@ -1,4 +1,4 @@
-import { COLUMN_LINK } from "@/shared/config/api/columns.config";
+import { api } from "@/shared/config/api/api.config";
 import axios from "axios";
 
 const handleSubmit = async (
@@ -7,7 +7,7 @@ const handleSubmit = async (
 ) => {
 
   const response = await axios.patch(
-    `${COLUMN_LINK}/${columnId}`,
+    api.columns.update(columnId),
     {
       title: state
     }
