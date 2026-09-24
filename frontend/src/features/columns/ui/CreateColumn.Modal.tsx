@@ -25,18 +25,10 @@ function CreateColumnModal({ onCreated }: CreateColumnModalProps) {
           fields: [""],
         }}
         validate={(values) => {
-          const errors: { title?: string; fields?: Array<string | undefined> } = {}
+          const errors: { title?: string } = {}
 
           if (!values.title.trim()) {
             errors.title = "Board name is required"
-          }
-
-          const fieldErrors = values.fields.map((field) =>
-            field.trim() ? undefined : "Field name is required"
-          )
-
-          if (fieldErrors.some(Boolean)) {
-            errors.fields = fieldErrors
           }
 
           return errors
@@ -70,19 +62,19 @@ function CreateColumnModal({ onCreated }: CreateColumnModalProps) {
             </div>
 
             <FieldArray name="fields">
-              {({ push }) => (
+              {({ push, remove }) => (
                 <div className="flex flex-col gap-3">
                   <span className={`${textStyles.body.md} text-accent3-hover font-bold`}>Fields</span>
                   {values.fields.map((_, index) => (
-                    <div key={index} className="flex gap-2 flex-col">
-                      <Field
-                        name={`fields.${index}`}
-                        type="text"
-                        placeholder="e.g. To Do"
-                      />
-                      {errors.fields?.[index] && (
-                        <span className="text-sm text-red-400">{errors.fields[index]}</span>
-                      )}
+                    <div key={index} className="flex gap-2 items-center">
+                      <Field name={`fields.${index}`} type="text" placeholder="e.g. To Do" />
+                      <button
+                        type="button"
+                        onClick={() => remove(index)}
+                        className="text-sm text-red-400 hover:text-red-300 font-bold"
+                      >
+                        Remove
+                      </button>
                     </div>
                   ))}
                   <button
