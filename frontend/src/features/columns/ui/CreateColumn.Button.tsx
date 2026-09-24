@@ -7,7 +7,7 @@ interface ColumnButtonProps {
 
 function CreateColumnButton({ color, onClick }: ColumnButtonProps) {
     return (
-        <button onClick={onClick} className="text-primary text-[15px] py-4 pl-8 capitalize cursor-pointer flex gap-4 font-bold items-center">
+        <button onClick={onClick} className="text-primary text-[15px] py-4 pl-8 capitalize cursor-pointer flex gap-4 font-bold! items-center">
             <AbstractIcon fill={color.create} />
             + Create New Board
         </button>
