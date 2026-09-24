@@ -26,3 +26,11 @@ CREATE TABLE tasks (
   description TEXT,
   position INTEGER NOT NULL
 );
+
+CREATE TABLE subtasks (
+  id SERIAL PRIMARY KEY,
+  task_id INTEGER NOT NULL REFERENCES tasks(id) ON DELETE CASCADE,
+  title VARCHAR(255) NOT NULL,
+  completed BOOLEAN NOT NULL DEFAULT FALSE,
+  position INTEGER NOT NULL
+)
