@@ -65,7 +65,21 @@ function EditColumnModal({ categories, onCategoriesChange }: EditColumnModalProp
         }}
         onSubmit={async (values, { setStatus }) => {
           try {
+            const currentCategoryIds = new Set(
+              values.fields.flatMap((field) =>
+                field.id !== undefined ? [field.id] : []
+              )
+            )
+            const deletedCategoryIds = categories
+              .map((category) => category.id)
+              .filter((categoryId) => !currentCategoryIds.has(categoryId))
+
             const updatedColumn = await updateBoard(values.title, selectedColumn.id)
+            await Promise.all(
+              deletedCategoryIds.map((categoryId) =>
+                deleteCategory(selectedColumn.id, categoryId)
+              )
+            )
             const updatedCategories = await Promise.all(
               values.fields
                 .filter((field) => field.title.trim())
@@ -122,18 +136,7 @@ function EditColumnModal({ categories, onCategoriesChange }: EditColumnModalProp
                         />
                         <button
                           type="button"
-                          onClick={async () => {
-                            if (!field.id) {
-                              remove(index)
-                              return
-                            }
-
-                            await deleteCategory(selectedColumn.id, field.id)
-                            onCategoriesChange(
-                              categories.filter((category) => category.id !== field.id)
-                            )
-                            remove(index)
-                          }}
+                          onClick={() => remove(index)}
                           aria-label={`Delete ${field.title || "column"}`}
                           className="w-3.5 h-3.5"
                         >
