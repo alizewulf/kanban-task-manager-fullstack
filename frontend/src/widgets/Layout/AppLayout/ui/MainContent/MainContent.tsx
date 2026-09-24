@@ -7,9 +7,10 @@ import { useAppContext } from "@/shared/context/app.context";
 import textStyles from "@/shared/typography/typography";
 import { useModal } from "@/shared/ui/modal/useModal";
 import type { RootState } from "@/store/store";
+import EmptyBoardContent from "@/widgets/Layout/AppLayout/ui/EmptyBoardContent/EmptyBoardContent";
 import { useSelector } from "react-redux";
 
-import { useTaskSubtasks } from "../../../../../features/taskDetails/model/useTaskSubtasks";
+import { useTaskSubtasks } from "@/features/taskDetails/model/useTaskSubtasks";
 
 interface MainContentProps {
   onCategoryCreated: (category: TaskCategory) => void;
@@ -63,6 +64,10 @@ function MainContent({ onCategoryCreated }: MainContentProps) {
       />
     );
   };
+
+  if (categories.length === 0) {
+    return <EmptyBoardContent onCategoryCreated={onCategoryCreated} />;
+  }
 
   return (
     <div className="flex gap-6 pt-6 pl-6">
