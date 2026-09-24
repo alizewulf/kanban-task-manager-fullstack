@@ -1,41 +1,18 @@
-import { useEffect, useState } from "react";
-
 import CreateTaskColumnButton from "@/features/createTaskColumn";
-
 import type { TaskCategory } from "@/features/taskCategories/model/category.types";
-import type { Task } from "@/features/tasks/model/task.types";
-
-import { getTasks } from "@/features/tasks/model/getTasks";
-
+import { useAppContext } from "@/shared/context/app.context";
 import textStyles from "@/shared/typography/typography";
 
 interface MainContentProps {
-  data: TaskCategory[];
   onCategoryCreated: (category: TaskCategory) => void;
 }
 
-function MainContent({ data, onCategoryCreated }: MainContentProps) {
-  const [tasks, setTasks] = useState<Record<number, Task[]>>({});
-
-  useEffect(() => {
-    const loadTasks = async () => {
-      const result: Record<number, Task[]> = {};
-
-      for (const category of data) {
-        const tasks = await getTasks(category.id);
-
-        result[category.id] = tasks;
-      }
-
-      setTasks(result);
-    };
-
-    loadTasks();
-  }, [data]);
+function MainContent({ onCategoryCreated }: MainContentProps) {
+  const { categories, tasks } = useAppContext();
 
   return (
     <div className="flex gap-6 pt-6 pl-6">
-      {data.map((task_category) => (
+      {categories.map((task_category) => (
         <div
           key={task_category.id}
           className="flex flex-col gap-3"

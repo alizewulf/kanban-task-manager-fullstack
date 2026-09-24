@@ -9,16 +9,10 @@ import EditColumnModal from "@/features/editColumn/ui/EditColumn.Modal"
 import { useModal } from "@/shared/ui/modal/useModal"
 import DeleteColumnButton from "@/features/deleteColumn"
 import DeleteColumnModal from "@/features/deleteColumn/ui/DeleteColumn.Modal"
-import type { TaskCategory } from "@/features/taskCategories/model/category.types"
 import CreateTaskButton from "@/features/tasks/"
 import CreateTaskModal from "@/features/tasks/ui/CreateTask.Modal"
 
-interface HeaderProps {
-  categories: TaskCategory[]
-  onCategoriesChange: (categories: TaskCategory[]) => void
-}
-
-function Header({ categories, onCategoriesChange }: HeaderProps) {
+function Header() {
   const { selectedColumn } = useAppContext()
   const theme = useSelector((state:RootState) => state.theme.theme)
   const isDark = theme === "dark"
@@ -26,12 +20,7 @@ function Header({ categories, onCategoriesChange }: HeaderProps) {
   const { openModal } = useModal()
 
   function handleEditColumn() {
-    openModal(
-      <EditColumnModal
-        categories={categories}
-        onCategoriesChange={onCategoriesChange}
-      />
-    )
+    openModal(<EditColumnModal />)
     setDropdown(false)
   }
 

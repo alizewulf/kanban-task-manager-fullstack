@@ -1,6 +1,4 @@
 import { Field, FieldArray, Form, Formik } from "formik"
-
-import type { TaskCategory } from "@/features/taskCategories/model/category.types"
 import createTaskCategory from "@/features/createTaskColumn/model/createTaskCategory"
 import deleteCategory from "@/features/taskCategories/model/deleteCategory"
 import updateCategory from "@/features/taskCategories/model/updateCategory"
@@ -13,18 +11,13 @@ import { useSelector } from "react-redux"
 import type { RootState } from "@/store/store"
 import RemoveIcon from "@/shared/ui/icons/RemoveIcon"
 
-interface EditColumnModalProps {
-  categories: TaskCategory[]
-  onCategoriesChange: (categories: TaskCategory[]) => void
-}
-
 interface EditBoardValues {
   title: string
   fields: Array<{ id?: number; title: string }>
 }
 
-function EditColumnModal({ categories, onCategoriesChange }: EditColumnModalProps) {
-  const { selectedColumn, setSelectedColumn } = useAppContext()
+function EditColumnModal() {
+  const { selectedColumn, categories, setSelectedColumn, setCategories, setTasks } = useAppContext()
   const { closeModal } = useModal()
   const theme = useSelector((state: RootState) => state.theme.theme)
   const isDark = theme === "dark"
@@ -91,7 +84,16 @@ function EditColumnModal({ categories, onCategoriesChange }: EditColumnModalProp
             )
 
             setSelectedColumn(updatedColumn)
-            onCategoriesChange(updatedCategories)
+            setCategories(updatedCategories)
+            setTasks((current) => {
+              const next = { ...current }
+
+              deletedCategoryIds.forEach((categoryId) => {
+                delete next[categoryId]
+              })
+
+              return next
+            })
             closeModal()
           } catch {
             setStatus("Unable to update board")
