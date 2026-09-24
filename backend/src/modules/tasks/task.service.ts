@@ -14,7 +14,7 @@ export async function createTask(categoryId: number, title: string, description:
       [categoryId]
     )
 
-    const position = positionResult.rows[0].position
+    const position = positionResult.rows[0].max_position;
 
     const result = await pool.query(
       'INSERT INTO tasks (category_id, title, description, position) VALUES ($1, $2, $3, $4) RETURNING *',
