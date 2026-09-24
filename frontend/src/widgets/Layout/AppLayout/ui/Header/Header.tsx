@@ -1,7 +1,6 @@
 import { useAppContext } from "@/shared/context/app.context"
 import textStyles from "@/shared/typography/typography"
 import ThreeDotsIcon from "./3.Dots.Icon"
-import Button from "@/shared/ui/button/Button"
 import { useSelector } from "react-redux"
 import type { RootState } from "@/store/store"
 import { useState } from "react"
@@ -11,6 +10,8 @@ import { useModal } from "@/shared/ui/modal/useModal"
 import DeleteColumnButton from "@/features/deleteColumn"
 import DeleteColumnModal from "@/features/deleteColumn/ui/DeleteColumn.Modal"
 import type { TaskCategory } from "@/features/taskCategories/model/category.types"
+import CreateTaskButton from "@/features/tasks/"
+import CreateTaskModal from "@/features/tasks/ui/CreateTask.Modal"
 
 interface HeaderProps {
   categories: TaskCategory[]
@@ -44,7 +45,7 @@ function Header({ categories, onCategoriesChange }: HeaderProps) {
         <h2 className={`${textStyles.heading.xl} ${isDark? "text-black" : "text-white"} capitalize px-6`}>{selectedColumn?.title}</h2>
 
         <div className="flex relative gap-6 justify-end items-center pr-8">
-            <Button variant="primary" disabled>+ Add New Task</Button>
+            <CreateTaskButton onClick={() => openModal(<CreateTaskModal/>)}/>
             <button className="w-10 h-10 flex items-center justify-center" onClick={() => setDropdown(prev => !prev)}><ThreeDotsIcon/></button>
             {renderDropdown && (
               <>

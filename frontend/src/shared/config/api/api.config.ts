@@ -21,6 +21,7 @@ export interface ApiConfig {
 	}
 	tasks: {
 		list: (categoryId: number) => string
+        create: (categoryId: number) => string
 	}
 }
 
@@ -51,5 +52,6 @@ export const api: ApiConfig = {
 	},
 	tasks: {
 		list: (categoryId) => `${API_BASE_URL}/categories/${categoryId}/tasks`,
+        create: (categoryId) => `${API_BASE_URL}/categories/${categoryId}/tasks`
 	},
 }
