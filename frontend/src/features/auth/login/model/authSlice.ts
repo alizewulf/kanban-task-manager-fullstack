@@ -45,9 +45,15 @@ const authSlice = createSlice({
 
             setAuthStorageState(false);
             setAuthStorageUser(null);
-        }
+        },
+        updateAuthUser: (state, action: PayloadAction<Pick<User, "id" | "login">>) => {
+            state.user = action.payload;
+            if (getAuthStorageState()) {
+                setAuthStorageUser(action.payload);
+            }
+        },
     }
 });
 
-export const { setAuth, isAuth } = authSlice.actions;
+export const { setAuth, isAuth, updateAuthUser } = authSlice.actions;
 export default authSlice.reducer;

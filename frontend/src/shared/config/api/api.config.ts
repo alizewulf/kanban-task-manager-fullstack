@@ -2,6 +2,8 @@ export interface ApiConfig {
 	baseUrl: string
 	auth: {
 		login: string
+		changeLogin: string
+		changePassword: string
 	}
 	users: {
 		list: string
@@ -34,6 +36,8 @@ export const api: ApiConfig = {
 	baseUrl: API_BASE_URL,
 	auth: {
 		login: `${API_BASE_URL}/auth/login`,
+		changeLogin: `${API_BASE_URL}/auth/change-login`,
+		changePassword: `${API_BASE_URL}/auth/change-password`,
 	},
 	users: {
 		list: `${API_BASE_URL}/users`,

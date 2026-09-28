@@ -1,14 +1,9 @@
 import { Form, Field, ErrorMessage, FormikProvider } from "formik";
 import Button from "../../../../shared/ui/button/Button";
-import type { LoginFormProps } from "./interface";
 import useLoginForm from "../model/useLoginForm";
 
-function LoginForm({ login, users, isUsersLoading = false }: LoginFormProps) {
-  const { formik, isSubmitLocked, clearErrorOnFieldChange } = useLoginForm({
-    login,
-    users,
-    isUsersLoading,
-  });
+function LoginForm() {
+  const { formik, isSubmitLocked, clearErrorOnFieldChange } = useLoginForm();
 
   return (
     <FormikProvider value={formik}>
@@ -81,7 +76,7 @@ function LoginForm({ login, users, isUsersLoading = false }: LoginFormProps) {
           className="mt-2 w-full"
           disabled={isSubmitLocked}
         >
-          {isUsersLoading ? "Loading..." : "Sign in"}
+          {isSubmitLocked ? "Signing in..." : "Sign in"}
         </Button>
       </Form>
     </FormikProvider>

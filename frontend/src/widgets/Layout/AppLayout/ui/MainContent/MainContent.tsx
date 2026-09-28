@@ -57,7 +57,7 @@ function MainContent({ onCategoryCreated }: MainContentProps) {
       <TaskDetailModal
         task={task}
         subtasks={nextSubtasks}
-        setSubtasks={(value) => updateSubtasks(task.id, value)}
+        setSubtasks={(value:any) => updateSubtasks(task.id, value)}
       />
     );
   };

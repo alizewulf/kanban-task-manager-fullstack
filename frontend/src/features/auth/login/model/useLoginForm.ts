@@ -1,10 +1,10 @@
-import { useState } from "react";
 import { useFormik } from "formik";
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import type { User } from "../../../../entities/users/interface";
 import type { AppDispatch } from "../../../../store/store";
 import { setAuth } from "./authSlice";
+import { api } from "../../../../shared/config/api/api.config";
 
 interface LoginFormValues {
   login: string;
@@ -12,22 +12,9 @@ interface LoginFormValues {
   rememberMe: boolean;
 }
 
-interface UseLoginFormParams {
-  login: (
-    users: User[],
-    form: {
-      login: string;
-      password: string;
-    }
-  ) => User | "error";
-  users: User[];
-  isUsersLoading?: boolean;
-}
-
-function useLoginForm({ login, users, isUsersLoading = false }: UseLoginFormParams) {
+function useLoginForm() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const [isSubmitBlocked, setIsSubmitBlocked] = useState(false);
 
   const formik = useFormik<LoginFormValues>({
     initialValues: {
@@ -35,48 +22,39 @@ function useLoginForm({ login, users, isUsersLoading = false }: UseLoginFormPara
       password: "",
       rememberMe: false,
     },
-    onSubmit: (values, { setStatus, setSubmitting }) => {
-      if (isUsersLoading || users.length === 0) {
-        return;
-      }
-
-      const result = login(users, {
-        login: values.login,
-        password: values.password,
-      });
-
-      if (result === "error") {
+    onSubmit: async (values, { setStatus, setSubmitting }) => {
+      try {
+        const response = await axios.post(api.auth.login, {
+          login: values.login,
+          password: values.password,
+        });
+        dispatch(setAuth({
+          isAuth: true,
+          user: response.data.data,
+          rememberMe: values.rememberMe,
+        }));
+        navigate("/app", { replace: true });
+      } catch (error) {
+        const message = axios.isAxiosError(error)
+          ? error.response?.data?.message
+          : undefined;
+        setStatus(message ?? "Wrong login or password");
+      } finally {
         setSubmitting(false);
-        setStatus("Wrong login or password");
-        setIsSubmitBlocked(true);
-        return;
       }
-
-      setIsSubmitBlocked(false);
-      dispatch(setAuth({ isAuth: true, user: result, rememberMe: values.rememberMe }));
-      setStatus("Welcome back");
-      navigate("/app", { replace: true });
     },
   });
 
   const clearErrorOnFieldChange = (event: { target: { name?: string } }) => {
     formik.handleChange(event);
-
-    if (isSubmitBlocked || formik.status) {
-      setIsSubmitBlocked(false);
+    if (formik.status) {
       formik.setStatus(undefined);
     }
   };
 
-  const isSubmitLocked =
-    isUsersLoading ||
-    users.length === 0 ||
-    formik.isSubmitting ||
-    isSubmitBlocked;
-
   return {
     formik,
-    isSubmitLocked,
+    isSubmitLocked: formik.isSubmitting,
     clearErrorOnFieldChange,
   };
 }
