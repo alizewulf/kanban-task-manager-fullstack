@@ -44,7 +44,7 @@ function TaskCard({ task, taskSubtasks, isDark, onOpen }: TaskCardProps) {
 }
 
 function MainContent({ onCategoryCreated }: MainContentProps) {
-  const { categories, tasks } = useAppContext();
+  const { categories, tasks, setTasks } = useAppContext();
   const { subtasks, updateSubtasks } = useTaskSubtasks(tasks);
   const theme = useSelector((state: RootState) => state.theme.theme);
   const isDark = theme === "dark";
@@ -57,7 +57,16 @@ function MainContent({ onCategoryCreated }: MainContentProps) {
       <TaskDetailModal
         task={task}
         subtasks={nextSubtasks}
-        setSubtasks={(value:any) => updateSubtasks(task.id, value)}
+        setSubtasks={(value: Subtask[]) => updateSubtasks(task.id, value)}
+        onTaskSaved={(updatedTask, updatedSubtasks) => {
+          setTasks((current) => ({
+            ...current,
+            [updatedTask.category_id]: (current[updatedTask.category_id] ?? []).map((item) =>
+              item.id === updatedTask.id ? updatedTask : item
+            ),
+          }));
+          updateSubtasks(task.id, updatedSubtasks);
+        }}
       />
     );
   };
