@@ -1,4 +1,4 @@
-import { useRef, useState, type DragEvent } from "react";
+import { Fragment, useRef, useState, type DragEvent } from "react";
 
 import CreateTaskColumnButton from "@/features/createTaskColumn";
 import type { TaskCategory } from "@/features/taskCategories/model/category.types";
@@ -28,7 +28,6 @@ interface TaskCardProps {
   taskSubtasks: Subtask[];
   isDark: boolean;
   isDragging: boolean;
-  isDropTarget: boolean;
   onOpen: (task: Task) => void;
   onDragStart: (task: Task, event: DragEvent<HTMLDivElement>) => void;
   onDragOver: (task: Task, categoryId: number, event: DragEvent<HTMLDivElement>) => void;
@@ -41,7 +40,6 @@ function TaskCard({
   taskSubtasks,
   isDark,
   isDragging,
-  isDropTarget,
   onOpen,
   onDragStart,
   onDragOver,
@@ -58,7 +56,7 @@ function TaskCard({
       onDragOver={(event) => onDragOver(task, task.category_id, event)}
       onDrop={(event) => onDrop(task.category_id, task.id, event)}
       onDragEnd={onDragEnd}
-      className={`group h-22 max-w-75 flex cursor-grab touch-none flex-col justify-center gap-2 rounded-lg px-4 py-6 font-bold! active:cursor-grabbing ${isDark ? "bg-white" : "bg-[#2B2C37]"} ${isDragging ? "opacity-45" : ""} ${isDropTarget ? "ring-2 ring-primary ring-offset-2 ring-offset-accent4" : ""}`}
+      className={`group h-22 max-w-75 flex cursor-pointer touch-none flex-col justify-center gap-2 rounded-lg px-4 py-6 font-bold! active:cursor-grabbing ${isDark ? "bg-white" : "bg-[#2B2C37]"} ${isDragging ? "opacity-45" : ""}`}
     >
       <p className={`${isDark ? "text-black" : "text-white"} capitalize ${textStyles.heading.md} transition-all duration-200 group-hover:translate-x-1 group-hover:text-primary`}>
         {task.title}
@@ -221,6 +219,22 @@ function MainContent({ onCategoryCreated }: MainContentProps) {
     void persistMove(taskId, categoryId, beforeTaskId);
   };
 
+  const handleDropAtPosition = (
+    categoryId: number,
+    beforeTaskId: number | null,
+    event: DragEvent<HTMLDivElement>
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const taskId = Number(event.dataTransfer.getData("text/plain"));
+
+    if (!Number.isSafeInteger(taskId) || taskId < 1 || draggingTaskIdRef.current === null) {
+      return;
+    }
+
+    void persistMove(taskId, categoryId, beforeTaskId);
+  };
+
   const handleDropAtEnd = (categoryId: number, event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     const taskId = Number(event.dataTransfer.getData("text/plain"));
@@ -278,21 +292,43 @@ function MainContent({ onCategoryCreated }: MainContentProps) {
                 const isDropBefore = isCategoryDropTarget && dropIndicator?.beforeTaskId === task.id;
 
                 return (
-                  <TaskCard
-                    key={task.id}
-                    task={task}
-                    taskSubtasks={subtasks[task.id] ?? []}
-                    isDark={isDark}
-                    isDragging={draggingTaskId === task.id}
-                    isDropTarget={isDropBefore}
-                    onOpen={handleTaskOpen}
-                    onDragStart={handleDragStart}
-                    onDragOver={handleDragOver}
-                    onDrop={(categoryId, _beforeTaskId, event) => handleDropOnTask(task, categoryId, event)}
-                    onDragEnd={handleDragEnd}
-                  />
+                  <Fragment key={task.id}>
+                    {isDropBefore && draggingTaskId !== null && (
+                      <div
+                        aria-hidden="true"
+                        onDragOver={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                        }}
+                        onDrop={(event) => handleDropAtPosition(taskCategory.id, task.id, event)}
+                        className="h-22 max-w-75 shrink-0 rounded-lg border-2 border-dashed border-primary bg-primary/10"
+                      />
+                    )}
+                    <TaskCard
+                      task={task}
+                      taskSubtasks={subtasks[task.id] ?? []}
+                      isDark={isDark}
+                      isDragging={draggingTaskId === task.id}
+                      onOpen={handleTaskOpen}
+                      onDragStart={handleDragStart}
+                      onDragOver={handleDragOver}
+                      onDrop={(categoryId, _beforeTaskId, event) => handleDropOnTask(task, categoryId, event)}
+                      onDragEnd={handleDragEnd}
+                    />
+                  </Fragment>
                 );
               })}
+              {isCategoryDropTarget && dropIndicator?.beforeTaskId === null && draggingTaskId !== null && (
+                <div
+                  aria-hidden="true"
+                  onDragOver={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                  }}
+                  onDrop={(event) => handleDropAtPosition(taskCategory.id, null, event)}
+                  className="h-22 max-w-75 shrink-0 rounded-lg border-2 border-dashed border-primary bg-primary/10"
+                />
+              )}
               {isMoving && draggingTaskId !== null && (
                 <p className="px-3 py-2 text-xs text-accent3-hover">Moving task...</p>
               )}
