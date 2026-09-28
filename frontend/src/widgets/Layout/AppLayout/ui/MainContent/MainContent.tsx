@@ -51,6 +51,7 @@ function TaskCard({
   return (
     <div
       draggable
+      data-task-id={task.id}
       onClick={() => onOpen(task)}
       onDragStart={(event) => onDragStart(task, event)}
       onDragOver={(event) => onDragOver(task, task.category_id, event)}
@@ -232,19 +233,12 @@ function MainContent({ onCategoryCreated }: MainContentProps) {
       return;
     }
 
-    void persistMove(taskId, categoryId, beforeTaskId);
-  };
-
-  const handleDropAtEnd = (categoryId: number, event: DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    const taskId = Number(event.dataTransfer.getData("text/plain"));
-    setDropIndicator(null);
-
-    if (!Number.isSafeInteger(taskId) || taskId < 1 || draggingTaskIdRef.current === null) {
+    if (beforeTaskId === taskId) {
+      setDropIndicator(null);
       return;
     }
 
-    void persistMove(taskId, categoryId, null);
+    void persistMove(taskId, categoryId, beforeTaskId);
   };
 
   if (categories.length === 0) {
@@ -283,9 +277,25 @@ function MainContent({ onCategoryCreated }: MainContentProps) {
 
                 event.preventDefault();
                 event.dataTransfer.dropEffect = "move";
-                showDropIndicator({ categoryId: taskCategory.id, beforeTaskId: null });
+                const destinationTasks = categoryTasks.filter((task) => task.id !== draggingTaskIdRef.current);
+                const targetTask = destinationTasks.find((task) => {
+                  const taskElement = event.currentTarget.querySelector<HTMLElement>(`[data-task-id="${task.id}"]`);
+                  if (!taskElement) {
+                    return false;
+                  }
+
+                  const bounds = taskElement.getBoundingClientRect();
+                  return event.clientY < bounds.top + bounds.height / 2;
+                });
+
+                showDropIndicator({ categoryId: taskCategory.id, beforeTaskId: targetTask?.id ?? null });
               }}
-              onDrop={(event) => handleDropAtEnd(taskCategory.id, event)}
+              onDrop={(event) => {
+                const beforeTaskId = dropIndicator?.categoryId === taskCategory.id
+                  ? dropIndicator.beforeTaskId
+                  : null;
+                handleDropAtPosition(taskCategory.id, beforeTaskId, event);
+              }}
               className={`flex flex-1 flex-col gap-5 rounded-lg transition-colors ${isCategoryDropTarget && dropIndicator?.beforeTaskId === null ? "bg-primary/10 outline-2 outline-dashed outline-primary" : ""}`}
             >
               {categoryTasks.map((task) => {
@@ -295,14 +305,16 @@ function MainContent({ onCategoryCreated }: MainContentProps) {
                   <Fragment key={task.id}>
                     {isDropBefore && draggingTaskId !== null && (
                       <div
-                        aria-hidden="true"
+                        role="status"
                         onDragOver={(event) => {
                           event.preventDefault();
                           event.stopPropagation();
                         }}
                         onDrop={(event) => handleDropAtPosition(taskCategory.id, task.id, event)}
-                        className="h-22 max-w-75 shrink-0 rounded-lg border-2 border-dashed border-primary bg-primary/10"
-                      />
+                        className="flex h-22 max-w-75 shrink-0 items-center justify-center rounded-lg border-2 border-dashed border-primary bg-primary/10 text-sm font-semibold text-primary"
+                      >
+                        Drop here
+                      </div>
                     )}
                     <TaskCard
                       task={task}
@@ -320,14 +332,16 @@ function MainContent({ onCategoryCreated }: MainContentProps) {
               })}
               {isCategoryDropTarget && dropIndicator?.beforeTaskId === null && draggingTaskId !== null && (
                 <div
-                  aria-hidden="true"
+                  role="status"
                   onDragOver={(event) => {
                     event.preventDefault();
                     event.stopPropagation();
                   }}
                   onDrop={(event) => handleDropAtPosition(taskCategory.id, null, event)}
-                  className="h-22 max-w-75 shrink-0 rounded-lg border-2 border-dashed border-primary bg-primary/10"
-                />
+                  className="flex h-22 max-w-75 shrink-0 items-center justify-center rounded-lg border-2 border-dashed border-primary bg-primary/10 text-sm font-semibold text-primary"
+                >
+                  Drop here
+                </div>
               )}
               {isMoving && draggingTaskId !== null && (
                 <p className="px-3 py-2 text-xs text-accent3-hover">Moving task...</p>
