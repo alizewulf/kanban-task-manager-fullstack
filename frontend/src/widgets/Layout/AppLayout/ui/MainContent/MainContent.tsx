@@ -238,7 +238,7 @@ function MainContent({ onCategoryCreated }: MainContentProps) {
   }
 
   return (
-    <div className="flex gap-6 pt-6 pl-6">
+    <div className="flex min-h-[calc(100vh-8rem)] items-stretch gap-6 pt-6 pl-6">
       {moveError && (
         <p role="alert" className="fixed right-6 top-6 z-50 rounded-lg bg-danger px-4 py-3 text-sm font-bold text-white shadow-lg">
           {moveError}
@@ -250,7 +250,7 @@ function MainContent({ onCategoryCreated }: MainContentProps) {
         const isCategoryDropTarget = dropIndicator?.categoryId === taskCategory.id;
 
         return (
-          <div key={taskCategory.id} className="flex w-75 flex-col gap-5">
+          <div key={taskCategory.id} className="flex min-h-[calc(100vh-8rem)] w-75 flex-col gap-5">
             <div className="flex h-fit items-center gap-3">
               <span
                 style={{ backgroundColor: taskCategory.color }}
@@ -272,7 +272,7 @@ function MainContent({ onCategoryCreated }: MainContentProps) {
                 showDropIndicator({ categoryId: taskCategory.id, beforeTaskId: null });
               }}
               onDrop={(event) => handleDropAtEnd(taskCategory.id, event)}
-              className={`flex min-h-24 flex-col gap-5 rounded-lg transition-colors ${isCategoryDropTarget && dropIndicator?.beforeTaskId === null ? "bg-primary/10 outline-2 outline-dashed outline-primary" : ""}`}
+              className={`flex flex-1 flex-col gap-5 rounded-lg transition-colors ${isCategoryDropTarget && dropIndicator?.beforeTaskId === null ? "bg-primary/10 outline-2 outline-dashed outline-primary" : ""}`}
             >
               {categoryTasks.map((task) => {
                 const isDropBefore = isCategoryDropTarget && dropIndicator?.beforeTaskId === task.id;

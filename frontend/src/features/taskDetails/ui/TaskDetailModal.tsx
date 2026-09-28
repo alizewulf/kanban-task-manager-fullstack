@@ -35,12 +35,18 @@ function TaskDetailModal({ task, subtasks, setSubtasks, onTaskSaved }: TaskDetai
     const initialSubtasks = useRef(subtasks);
     const [isEditing, setIsEditing] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const [togglingSubtaskId, setTogglingSubtaskId] = useState<number | null>(null);
     const [status, setStatus] = useState("");
     const [availableSubtasks, setAvailableSubtasks] = useState(subtasks);
     const [draftTitle, setDraftTitle] = useState(task.title);
     const [draftDescription, setDraftDescription] = useState(task.description ?? "");
     const [draftSubtasks, setDraftSubtasks] = useState(() => toDraftSubtasks(subtasks));
     const { closeModal } = useModal();
+    const setSubtasksRef = useRef(setSubtasks);
+
+    useEffect(() => {
+        setSubtasksRef.current = setSubtasks;
+    }, [setSubtasks]);
 
     useEffect(() => {
         if (initialSubtasks.current.length > 0) {
@@ -59,7 +65,7 @@ function TaskDetailModal({ task, subtasks, setSubtasks, onTaskSaved }: TaskDetai
                 if (isMounted) {
                     setAvailableSubtasks(data);
                     setDraftSubtasks(toDraftSubtasks(data));
-                    setSubtasks(data);
+                    setSubtasksRef.current(data);
                 }
             } catch {
                 if (isMounted) {
@@ -78,7 +84,43 @@ function TaskDetailModal({ task, subtasks, setSubtasks, onTaskSaved }: TaskDetai
         return () => {
             isMounted = false;
         };
-    }, [task.id, setSubtasks]);
+    }, [task.id]);
+
+    const handleSubtaskToggle = async (subtaskId: number, completed: boolean) => {
+        if (togglingSubtaskId !== null) {
+            return;
+        }
+
+        const previousSubtasks = availableSubtasks;
+        const nextSubtasks = previousSubtasks.map((subtask) =>
+            subtask.id === subtaskId ? { ...subtask, completed } : subtask
+        );
+
+        setAvailableSubtasks(nextSubtasks);
+        setTogglingSubtaskId(subtaskId);
+        setStatus("");
+
+        try {
+            const updated = await updateTaskDetails(task.id, {
+                title: task.title,
+                description: task.description ?? "",
+                subtasks: nextSubtasks.map(({ id, title, completed: isCompleted }) => ({
+                    id,
+                    title,
+                    completed: isCompleted,
+                })),
+            });
+
+            setAvailableSubtasks(updated.subtasks);
+            setSubtasksRef.current(updated.subtasks);
+            onTaskSaved(updated.task, updated.subtasks);
+        } catch {
+            setAvailableSubtasks(previousSubtasks);
+            setStatus("Unable to update subtask status. Please try again.");
+        } finally {
+            setTogglingSubtaskId(null);
+        }
+    };
 
     const handleSave = async () => {
         if (!draftTitle.trim()) {
@@ -235,8 +277,13 @@ function TaskDetailModal({ task, subtasks, setSubtasks, onTaskSaved }: TaskDetai
                     <div className="flex flex-col gap-2">
                         {availableSubtasks.map((subtaskItem) => (
                             <div key={subtaskItem.id} className="flex items-center gap-2 rounded border border-accent3-hover px-3 py-2">
-                                <span
-                                    className={`h-3.5 w-3.5 rounded-full border ${subtaskItem.completed ? "bg-primary border-primary" : "border-accent3-hover bg-transparent"}`}
+                                <input
+                                    type="checkbox"
+                                    aria-label={`Mark ${subtaskItem.title} ${subtaskItem.completed ? "incomplete" : "complete"}`}
+                                    checked={subtaskItem.completed}
+                                    disabled={togglingSubtaskId !== null}
+                                    onChange={(event) => handleSubtaskToggle(subtaskItem.id, event.target.checked)}
+                                    className="h-4 w-4 shrink-0 cursor-pointer accent-primary disabled:cursor-wait"
                                 />
                                 <span className={subtaskItem.completed ? "line-through text-accent3-hover" : "text-inherit"}>
                                     {subtaskItem.title}
