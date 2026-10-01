@@ -1,16 +1,20 @@
 import { Form, Field, ErrorMessage, FormikProvider } from "formik";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../../../store/store";
 import Button from "../../../../shared/ui/button/Button";
 import useLoginForm from "../model/useLoginForm";
 
 function LoginForm() {
   const { formik, isSubmitLocked, clearErrorOnFieldChange } = useLoginForm();
   const [showPassword, setShowPassword] = useState(false);
+  const theme = useSelector((state: RootState) => state.theme.theme);
+  const isDark = theme === "dark";
 
   return (
     <FormikProvider value={formik}>
       <Form className="space-y-4" onSubmit={formik.handleSubmit}>
-        <label className="block text-[13px] font-semibold text-accent1">
+        <label className={`block text-[13px] font-semibold ${isDark ? "text-slate-100" : "text-accent1"}`}>
           <span className="mb-2 block">Login</span>
 
           <Field
@@ -18,7 +22,10 @@ function LoginForm() {
             name="login"
             placeholder="Your login"
             onChange={clearErrorOnFieldChange}
-            className="w-full rounded-2xl border border-accent3 bg-accent4 px-4 py-3 text-[14px] text-accent1 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            className={`w-full rounded-2xl border px-4 py-3 text-[14px] outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 ${isDark
+              ? "border-slate-700 bg-slate-900/80 text-slate-50 placeholder:text-slate-400"
+              : "border-accent3 bg-accent4 text-accent1 placeholder:text-accent3-hover"
+            }`}
           />
           <ErrorMessage
             name="login"
@@ -27,7 +34,7 @@ function LoginForm() {
           />
         </label>
 
-        <label className="block text-[13px] font-semibold text-accent1">
+        <label className={`block text-[13px] font-semibold ${isDark ? "text-slate-100" : "text-accent1"}`}>
           <span className="mb-2 block">Password</span>
 
           <div className="relative">
@@ -36,14 +43,17 @@ function LoginForm() {
               name="password"
               placeholder="••••••••"
               onChange={clearErrorOnFieldChange}
-              className="w-full rounded-2xl border border-accent3 bg-accent4 px-4 py-3 pr-12 text-[14px] text-accent1 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+              className={`w-full rounded-2xl border px-4 py-3 pr-12 text-[14px] outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 ${isDark
+                ? "border-slate-700 bg-slate-900/80 text-slate-50 placeholder:text-slate-400"
+                : "border-accent3 bg-accent4 text-accent1 placeholder:text-accent3-hover"
+              }`}
             />
 
             <button
               type="button"
               aria-label={showPassword ? "Hide password" : "Show password"}
               onClick={() => setShowPassword((current) => !current)}
-              className="absolute inset-y-0 right-3 flex items-center text-accent3-hover transition hover:text-accent1"
+              className={`absolute inset-y-0 right-3 flex items-center transition ${isDark ? "text-slate-400 hover:text-slate-200" : "text-accent3-hover hover:text-accent1"}`}
             >
               {showPassword ? (
                 <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[1.8]" aria-hidden="true">
@@ -69,7 +79,7 @@ function LoginForm() {
         </label>
 
         {formik.status ? (
-          <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div className={`rounded-2xl border px-4 py-3 text-sm ${isDark ? "border-red-500/40 bg-red-950/30 text-red-200" : "border-red-200 bg-red-50 text-red-700"}`}>
             {formik.status}
           </div>
         ) : null}
@@ -82,7 +92,7 @@ function LoginForm() {
             Forgot password?
           </a>
         </div>
-        <p className="text-xs text-accent3-hover">
+        <p className={`text-xs ${isDark ? "text-slate-400" : "text-accent3-hover"}`}>
           This session is kept in memory and ends when the page is reloaded.
         </p>
 
