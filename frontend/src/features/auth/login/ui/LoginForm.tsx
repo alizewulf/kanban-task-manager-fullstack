@@ -48,21 +48,7 @@ function LoginForm() {
           </div>
         ) : null}
 
-        <div className="flex items-center justify-between text-[13px]">
-          <label className="flex items-center gap-2 text-accent3-hover">
-            <input
-              type="checkbox"
-              name="rememberMe"
-              checked={formik.values.rememberMe}
-              onChange={(event) => {
-                clearErrorOnFieldChange(event);
-              }}
-              className="h-4 w-4 rounded border-accent3 text-primary focus:ring-primary"
-            />
-
-            Remember me
-          </label>
-
+        <div className="flex items-center justify-end text-[13px]">
           <a
             href="#"
             className="font-semibold text-primary hover:text-primary-hover"
@@ -70,6 +56,9 @@ function LoginForm() {
             Forgot password?
           </a>
         </div>
+        <p className="text-xs text-accent3-hover">
+          This session is kept in memory and ends when the page is reloaded.
+        </p>
 
         <Button
           type="submit"

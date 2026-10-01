@@ -4,7 +4,6 @@ export interface SettingsFeedback {
 }
 
 export interface ChangeLoginValues {
-  oldLogin: string;
   newLogin: string;
   password: string;
 }

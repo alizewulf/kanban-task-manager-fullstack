@@ -5,11 +5,18 @@ import { useNavigate } from "react-router";
 import type { AppDispatch } from "../../../../store/store";
 import { setAuth } from "./authSlice";
 import { api } from "../../../../shared/config/api/api.config";
+import { apiClient } from "../../../../shared/config/api/apiClient";
+import { setAccessToken } from "../../../../shared/config/api/accessToken";
+import type { User } from "../../../../entities/users/interface";
+
+interface AuthResponse {
+  data: User;
+  accessToken: string;
+}
 
 interface LoginFormValues {
   login: string;
   password: string;
-  rememberMe: boolean;
 }
 
 function useLoginForm() {
@@ -20,18 +27,16 @@ function useLoginForm() {
     initialValues: {
       login: "",
       password: "",
-      rememberMe: false,
     },
     onSubmit: async (values, { setStatus, setSubmitting }) => {
       try {
-        const response = await axios.post(api.auth.login, {
+        const response = await apiClient.post<AuthResponse>(api.auth.login, {
           login: values.login,
           password: values.password,
         });
+        setAccessToken(response.data.accessToken);
         dispatch(setAuth({
-          isAuth: true,
           user: response.data.data,
-          rememberMe: values.rememberMe,
         }));
         navigate("/app", { replace: true });
       } catch (error) {

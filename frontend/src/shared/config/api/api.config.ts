@@ -2,11 +2,11 @@ export interface ApiConfig {
 	baseUrl: string
 	auth: {
 		login: string
+		me: string
 		changeLogin: string
 		changePassword: string
 	}
 	users: {
-		list: string
 		create: string
 	}
 	columns: {
@@ -38,11 +38,11 @@ export const api: ApiConfig = {
 	baseUrl: API_BASE_URL,
 	auth: {
 		login: `${API_BASE_URL}/auth/login`,
+		me: `${API_BASE_URL}/auth/me`,
 		changeLogin: `${API_BASE_URL}/auth/change-login`,
 		changePassword: `${API_BASE_URL}/auth/change-password`,
 	},
 	users: {
-		list: `${API_BASE_URL}/users`,
 		create: `${API_BASE_URL}/users`,
 	},
 	columns: {

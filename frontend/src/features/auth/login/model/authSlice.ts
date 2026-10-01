@@ -1,59 +1,36 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import type { User } from "../../../../entities/users/interface";
-import {
-    getAuthStorageState,
-    getAuthStorageUser,
-    setAuthStorageState,
-    setAuthStorageUser,
-} from "./authStorage";
 
 interface AuthState {
     isAuth: boolean;
-    user: Pick<User, "id" | "login"> | null;
+    user: User | null;
 }
 
 const initialState: AuthState = {
-    isAuth: getAuthStorageState(),
-    user: getAuthStorageUser(),
+    isAuth: false,
+    user: null,
 };
 
 const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        isAuth: (state) => {
-            state.isAuth = !state.isAuth;
-        },
-
-        setAuth: (state, action: PayloadAction<boolean | { isAuth: boolean; user?: User; rememberMe?: boolean }>) => {
-            const isAuthValue = typeof action.payload === "boolean" ? action.payload : action.payload.isAuth;
-            const rememberMe = typeof action.payload === "boolean" ? true : action.payload.rememberMe;
-            const authenticatedUser = typeof action.payload === "boolean" ? state.user : action.payload.user ?? null;
-            const user = authenticatedUser
-                ? { id: authenticatedUser.id, login: authenticatedUser.login }
-                : null;
-
-            state.isAuth = isAuthValue;
-            state.user = isAuthValue ? user : null;
-
-            if (isAuthValue && rememberMe) {
-                setAuthStorageState(true);
-                setAuthStorageUser(user);
+        setAuth: (state, action: PayloadAction<{ user: User } | false>) => {
+            if (action.payload === false) {
+                state.isAuth = false;
+                state.user = null;
                 return;
             }
 
-            setAuthStorageState(false);
-            setAuthStorageUser(null);
+            state.isAuth = true;
+            state.user = action.payload.user;
         },
-        updateAuthUser: (state, action: PayloadAction<Pick<User, "id" | "login">>) => {
+        updateAuthUser: (state, action: PayloadAction<User>) => {
             state.user = action.payload;
-            if (getAuthStorageState()) {
-                setAuthStorageUser(action.payload);
-            }
         },
     }
 });
 
-export const { setAuth, isAuth, updateAuthUser } = authSlice.actions;
+export const { setAuth, updateAuthUser } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,4 +1,4 @@
-import axios from "axios";
+import { apiClient } from "@/shared/config/api/apiClient";
 
 import type { Task } from "./task.types";
 import { api } from "@/shared/config/api/api.config";
@@ -16,6 +16,6 @@ export interface MoveTaskResult {
 }
 
 export async function moveTask(taskId: number, data: MoveTaskInput): Promise<MoveTaskResult> {
-    const response = await axios.patch(api.tasks.move(taskId), data);
+    const response = await apiClient.patch(api.tasks.move(taskId), data);
     return response.data;
 }

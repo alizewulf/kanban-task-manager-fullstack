@@ -1,12 +1,12 @@
 import { api } from "@/shared/config/api/api.config";
-import axios from "axios";
+import { apiClient } from "@/shared/config/api/apiClient";
 
 const handleSubmit = async (
   state: string,
   columnId: number
 ) => {
 
-  const response = await axios.patch(
+  const response = await apiClient.patch(
     api.columns.update(columnId),
     {
       title: state

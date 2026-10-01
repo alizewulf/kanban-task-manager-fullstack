@@ -1,8 +1,8 @@
 import { api } from "@/shared/config/api/api.config";
-import axios from "axios";
+import { apiClient } from "@/shared/config/api/apiClient";
 
 function deleteColumn(columnId: number): Promise<void> {
-  return axios.delete(api.columns.delete(columnId))
+  return apiClient.delete(api.columns.delete(columnId))
     .then(() => {
       console.log(`Column with ID ${columnId} deleted successfully.`);
     })

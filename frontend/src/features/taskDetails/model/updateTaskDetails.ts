@@ -1,4 +1,4 @@
-import axios from "axios";
+import { apiClient } from "@/shared/config/api/apiClient";
 
 import type { Subtask } from "@/features/subtasks/model/subtask.types";
 import type { Task } from "@/features/tasks/model/task.types";
@@ -25,6 +25,6 @@ export async function updateTaskDetails(
     taskId: number,
     data: UpdateTaskDetailsInput
 ): Promise<UpdatedTaskDetails> {
-    const response = await axios.put(api.tasks.update(taskId), data);
+    const response = await apiClient.put(api.tasks.update(taskId), data);
     return response.data;
 }

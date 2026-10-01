@@ -4,10 +4,8 @@ import type { SettingsFeedback } from "../model/settings.types";
 import { settingsFeedbackClassName, settingsInputClassName } from "./settingsStyles";
 
 interface ChangeLoginFormProps {
-  oldLogin: string;
   newLogin: string;
   password: string;
-  setOldLogin: Dispatch<SetStateAction<string>>;
   setNewLogin: Dispatch<SetStateAction<string>>;
   setPassword: Dispatch<SetStateAction<string>>;
   feedback: SettingsFeedback | null;
@@ -17,10 +15,8 @@ interface ChangeLoginFormProps {
 }
 
 function ChangeLoginForm({
-  oldLogin,
   newLogin,
   password,
-  setOldLogin,
   setNewLogin,
   setPassword,
   feedback,
@@ -32,19 +28,8 @@ function ChangeLoginForm({
     <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border border-accent3/70 p-5">
       <div>
         <h3 className="font-bold">Change login</h3>
-        <p className="mt-1 text-xs text-accent3-hover">Confirm your current account details.</p>
+        <p className="mt-1 text-xs text-accent3-hover">Confirm with your current password.</p>
       </div>
-      <label className="block text-sm font-medium">
-        Current login
-        <input
-          required
-          autoComplete="username"
-          value={oldLogin}
-          onChange={(event) => setOldLogin(event.target.value)}
-          className={settingsInputClassName}
-          maxLength={50}
-        />
-      </label>
       <label className="block text-sm font-medium">
         New login
         <input

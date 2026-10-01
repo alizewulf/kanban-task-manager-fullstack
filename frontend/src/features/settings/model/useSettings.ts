@@ -8,6 +8,7 @@ import { useModal } from "@/shared/ui/modal/useModal";
 import { changeLogin } from "./changeLogin";
 import { changePassword } from "./changePassword";
 import type { SettingsFeedback } from "./settings.types";
+import { clearAccessToken } from "@/shared/config/api/accessToken";
 
 function getErrorMessage(error: unknown, fallback: string) {
   if (axios.isAxiosError(error)) {
@@ -22,7 +23,6 @@ export function useSettings() {
   const navigate = useNavigate();
   const { closeModal } = useModal();
 
-  const [oldLogin, setOldLogin] = useState("");
   const [newLogin, setNewLogin] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");
@@ -39,13 +39,11 @@ export function useSettings() {
     setIsChangingLogin(true);
     setLoginFeedback(null);
     try {
-      const updatedUser = await changeLogin(user.id, {
-        oldLogin,
+      const updatedUser = await changeLogin({
         newLogin,
         password: loginPassword,
       });
       dispatch(updateAuthUser(updatedUser));
-      setOldLogin("");
       setNewLogin("");
       setLoginPassword("");
       setLoginFeedback({ message: "Login updated successfully.", isSuccess: true });
@@ -66,7 +64,7 @@ export function useSettings() {
     setIsChangingPassword(true);
     setPasswordFeedback(null);
     try {
-      const message = await changePassword(user.id, { oldPassword, newPassword });
+      const message = await changePassword({ oldPassword, newPassword });
       setOldPassword("");
       setNewPassword("");
       setPasswordFeedback({
@@ -84,6 +82,7 @@ export function useSettings() {
   }
 
   function handleLogout() {
+    clearAccessToken();
     dispatch(setAuth(false));
     closeModal();
     navigate("/login", { replace: true });
@@ -92,12 +91,10 @@ export function useSettings() {
   return {
     user,
     form: {
-      oldLogin,
       newLogin,
       loginPassword,
       oldPassword,
       newPassword,
-      setOldLogin,
       setNewLogin,
       setLoginPassword,
       setOldPassword,

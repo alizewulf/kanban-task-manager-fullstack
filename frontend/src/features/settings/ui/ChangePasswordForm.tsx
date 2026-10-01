@@ -28,7 +28,7 @@ function ChangePasswordForm({
     <form onSubmit={onSubmit} className="space-y-4 rounded-2xl border border-accent3/70 p-5">
       <div>
         <h3 className="font-bold">Change password</h3>
-        <p className="mt-1 text-xs text-accent3-hover">New password must be 6–255 characters.</p>
+        <p className="mt-1 text-xs text-accent3-hover">New password must be 8–72 UTF-8 bytes.</p>
       </div>
       <label className="block text-sm font-medium">
         Current password
@@ -47,8 +47,8 @@ function ChangePasswordForm({
           required
           type="password"
           autoComplete="new-password"
-          minLength={6}
-          maxLength={255}
+          minLength={8}
+          maxLength={72}
           value={newPassword}
           onChange={(event) => setNewPassword(event.target.value)}
           className={settingsInputClassName}

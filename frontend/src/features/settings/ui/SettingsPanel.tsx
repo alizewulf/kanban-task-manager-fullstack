@@ -28,10 +28,8 @@ function SettingsPanel() {
 
       <div className="grid gap-5 md:grid-cols-2">
         <ChangeLoginForm
-          oldLogin={settings.form.oldLogin}
           newLogin={settings.form.newLogin}
           password={settings.form.loginPassword}
-          setOldLogin={settings.form.setOldLogin}
           setNewLogin={settings.form.setNewLogin}
           setPassword={settings.form.setLoginPassword}
           feedback={settings.loginFeedback}
