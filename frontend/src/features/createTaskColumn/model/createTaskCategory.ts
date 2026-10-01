@@ -1,4 +1,5 @@
 import axios from "axios"
+import { apiClient } from "@/shared/config/api/apiClient"
 
 import { api } from "@/shared/config/api/api.config"
 import type { TaskCategory } from "@/features/taskCategories/model/category.types"
@@ -8,7 +9,7 @@ export default async function createTaskCategory(
   title: string
 ): Promise<TaskCategory> {
   try {
-    const response = await axios.post(
+    const response = await apiClient.post(
       api.categories.create(columnId),
       { title }
     )

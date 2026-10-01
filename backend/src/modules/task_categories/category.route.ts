@@ -5,16 +5,20 @@ import {
 	getCategoriesController,
 	updateCategoryController,
 } from "./category.controller.js";
+import { authenticateToken } from "../auth/auth.middleware.js";
+import { requireOwnedResource } from "../auth/ownership.middleware.js";
 
 
 const router = Router()
 
-router.get("/:columnId/categories", getCategoriesController)
+router.use(authenticateToken);
 
-router.post("/:columnId/categories", createCategoryController)
+router.get("/:columnId/categories", requireOwnedResource("column", "columnId"), getCategoriesController)
 
-router.patch("/:columnId/categories/:categoryId", updateCategoryController)
+router.post("/:columnId/categories", requireOwnedResource("column", "columnId"), createCategoryController)
 
-router.delete("/:columnId/categories/:categoryId", deleteCategoryController)
+router.patch("/:columnId/categories/:categoryId", requireOwnedResource("column", "columnId"), updateCategoryController)
+
+router.delete("/:columnId/categories/:categoryId", requireOwnedResource("column", "columnId"), deleteCategoryController)
 
 export default router

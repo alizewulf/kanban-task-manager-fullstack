@@ -1,41 +1,44 @@
 import type { Request, Response } from "express";
-import { createUser, getUsers } from "./users.service.js";
+import { createAccessToken } from "../auth/auth.services.js";
+import { createUser } from "./users.service.js";
 
-export async function getUsersController(
-    _req: Request,
-    res: Response,
-) {
-    try {
-        const users = await getUsers();
-
-        res.status(200).json(users);
-    } catch (error) {
-        console.error(error);
-
-        res.status(500).json({
-            message: "Database error",
-        });
-    }
+function isUniqueViolation(error: unknown) {
+    return typeof error === "object" && error !== null && "code" in error && error.code === "23505";
 }
 
 export async function createUserController(
     req: Request,
     res: Response,
 ) {
+    const { login, password } = req.body ?? {};
+
+    if (
+        typeof login !== "string" ||
+        login.trim().length < 3 ||
+        login.trim().length > 50 ||
+        typeof password !== "string" ||
+        password.length < 8 ||
+        Buffer.byteLength(password, "utf8") > 72
+    ) {
+        return res.status(400).json({
+            message: "Login must be 3–50 characters and password must be 8–72 UTF-8 bytes",
+        });
+    }
+
     try {
-        const { login, password } = req.body;
+        const user = await createUser(login.trim(), password);
 
-        const user = await createUser(login, password);
-
-        res.status(201).json({
+        return res.status(201).json({
             message: "User created successfully",
             data: user,
+            accessToken: createAccessToken(user),
         });
     } catch (error) {
-        console.error(error);
+        if (isUniqueViolation(error)) {
+            return res.status(409).json({ message: "This login is already in use" });
+        }
 
-        res.status(500).json({
-            message: "Database error",
-        });
+        console.error(error);
+        return res.status(500).json({ message: "Unable to create user" });
     }
 }

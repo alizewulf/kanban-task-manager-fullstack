@@ -1,9 +1,18 @@
 import { ErrorMessage, Field, Form, Formik } from "formik"
+import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router"
 import Button from "../../../../shared/ui/button/Button"
+import type { AppDispatch } from "../../../../store/store"
+import { setAuth } from "../../login/model/authSlice"
+import { setAccessToken } from "../../../../shared/config/api/accessToken"
 import validate from "../model/validate"
 import createUser from "../model/createUser"
+import axios from "axios"
 
 function RegisterForm() {
+  const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
+
   return (
     <Formik initialValues={
       {
@@ -11,11 +20,23 @@ function RegisterForm() {
         password: ""
       }}
       validate={validate}
-      onSubmit={(values) => {
-          console.log(values)
-          createUser(values)
+      onSubmit={async (values, { setStatus, setSubmitting }) => {
+        try {
+          const response = await createUser(values)
+          setAccessToken(response.accessToken)
+          dispatch(setAuth({ user: response.data }))
+          navigate("/app", { replace: true })
+        } catch (error) {
+          const message = axios.isAxiosError(error)
+            ? error.response?.data?.message
+            : undefined
+          setStatus(message ?? "Unable to create account")
+        } finally {
+          setSubmitting(false)
+        }
       }}
     >
+      {({ isSubmitting, status }) => (
       <Form className="space-y-4">
         <label className="block text-[13px] font-semibold text-accent1">
           <span className="mb-2 block">Login</span>
@@ -47,10 +68,17 @@ function RegisterForm() {
           />
         </label>
 
-        <Button type="submit" className="mt-2 w-full">
-          Create account
+        {status ? (
+          <div role="alert" className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {status}
+          </div>
+        ) : null}
+
+        <Button type="submit" className="mt-2 w-full" disabled={isSubmitting}>
+          {isSubmitting ? "Creating account..." : "Create account"}
         </Button>
       </Form>
+      )}
     </Formik>
   )
 }

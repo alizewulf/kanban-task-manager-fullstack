@@ -1,14 +1,9 @@
 import { Form, Field, ErrorMessage, FormikProvider } from "formik";
 import Button from "../../../../shared/ui/button/Button";
-import type { LoginFormProps } from "./interface";
 import useLoginForm from "../model/useLoginForm";
 
-function LoginForm({ login, users, isUsersLoading = false }: LoginFormProps) {
-  const { formik, isSubmitLocked, clearErrorOnFieldChange } = useLoginForm({
-    login,
-    users,
-    isUsersLoading,
-  });
+function LoginForm() {
+  const { formik, isSubmitLocked, clearErrorOnFieldChange } = useLoginForm();
 
   return (
     <FormikProvider value={formik}>
@@ -53,21 +48,7 @@ function LoginForm({ login, users, isUsersLoading = false }: LoginFormProps) {
           </div>
         ) : null}
 
-        <div className="flex items-center justify-between text-[13px]">
-          <label className="flex items-center gap-2 text-accent3-hover">
-            <input
-              type="checkbox"
-              name="rememberMe"
-              checked={formik.values.rememberMe}
-              onChange={(event) => {
-                clearErrorOnFieldChange(event);
-              }}
-              className="h-4 w-4 rounded border-accent3 text-primary focus:ring-primary"
-            />
-
-            Remember me
-          </label>
-
+        <div className="flex items-center justify-end text-[13px]">
           <a
             href="#"
             className="font-semibold text-primary hover:text-primary-hover"
@@ -75,13 +56,16 @@ function LoginForm({ login, users, isUsersLoading = false }: LoginFormProps) {
             Forgot password?
           </a>
         </div>
+        <p className="text-xs text-accent3-hover">
+          This session is kept in memory and ends when the page is reloaded.
+        </p>
 
         <Button
           type="submit"
           className="mt-2 w-full"
           disabled={isSubmitLocked}
         >
-          {isUsersLoading ? "Loading..." : "Sign in"}
+          {isSubmitLocked ? "Signing in..." : "Sign in"}
         </Button>
       </Form>
     </FormikProvider>

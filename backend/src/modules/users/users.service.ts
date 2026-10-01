@@ -1,15 +1,11 @@
 import { pool } from "../../database/database.js";
-
-export async function getUsers() {
-    const result = await pool.query("SELECT * FROM users");
-
-    return result.rows;
-}
+import bcrypt from "bcrypt";
 
 export async function createUser(login: string, password: string) {
+    const passwordHash = await bcrypt.hash(password, 12);
     const result = await pool.query(
-        "INSERT INTO users (login, password) VALUES ($1, $2) RETURNING *",
-        [login, password],
+        "INSERT INTO users (login, password_hash) VALUES ($1, $2) RETURNING id, login",
+        [login, passwordHash],
     );
 
     return result.rows[0];

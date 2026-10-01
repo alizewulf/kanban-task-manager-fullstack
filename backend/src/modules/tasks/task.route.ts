@@ -1,10 +1,18 @@
 import { Router } from "express";
-import { createTaskController, getTasksController } from "./task.controller.js";
+import { createTaskController, getTasksController, moveTaskController, updateTaskDetailsController } from "./task.controller.js";
+import { authenticateToken } from "../auth/auth.middleware.js";
+import { requireOwnedResource } from "../auth/ownership.middleware.js";
 
 const router = Router();
 
-router.get("/categories/:categoryId/tasks", getTasksController);
+router.use(authenticateToken);
 
-router.post("/categories/:categoryId/tasks", createTaskController);
+router.get("/categories/:categoryId/tasks", requireOwnedResource("category", "categoryId"), getTasksController);
+
+router.post("/categories/:categoryId/tasks", requireOwnedResource("category", "categoryId"), createTaskController);
+
+router.put("/tasks/:taskId", requireOwnedResource("task", "taskId"), updateTaskDetailsController);
+
+router.patch("/tasks/:taskId/move", requireOwnedResource("task", "taskId"), moveTaskController);
 
 export default router;

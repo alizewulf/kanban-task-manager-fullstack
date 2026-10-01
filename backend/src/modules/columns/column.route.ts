@@ -5,15 +5,19 @@ import {
   updateColumnController,
   deleteColumnController
 } from "./column.controller.js";
+import { authenticateToken } from "../auth/auth.middleware.js";
+import { requireAuthenticatedUserId, requireOwnedResource } from "../auth/ownership.middleware.js";
 
 const router = Router();
 
-router.get("/:userId", getColumnsController);
+router.use(authenticateToken);
 
-router.post("/:userId", createColumnController);
+router.get("/:userId", requireAuthenticatedUserId, getColumnsController);
 
-router.patch("/:id", updateColumnController);
+router.post("/:userId", requireAuthenticatedUserId, createColumnController);
 
-router.delete("/:id", deleteColumnController);
+router.patch("/:id", requireOwnedResource("column", "id"), updateColumnController);
+
+router.delete("/:id", requireOwnedResource("column", "id"), deleteColumnController);
 
 export default router;

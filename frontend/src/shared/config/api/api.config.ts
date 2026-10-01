@@ -2,9 +2,11 @@ export interface ApiConfig {
 	baseUrl: string
 	auth: {
 		login: string
+		me: string
+		changeLogin: string
+		changePassword: string
 	}
 	users: {
-		list: string
 		create: string
 	}
 	columns: {
@@ -22,6 +24,8 @@ export interface ApiConfig {
 	tasks: {
 		list: (categoryId: number) => string
         create: (categoryId: number) => string
+		update: (taskId: number) => string
+		move: (taskId: number) => string
 	}
 	subtasks: {
 		list: (taskId: number) => string
@@ -34,9 +38,11 @@ export const api: ApiConfig = {
 	baseUrl: API_BASE_URL,
 	auth: {
 		login: `${API_BASE_URL}/auth/login`,
+		me: `${API_BASE_URL}/auth/me`,
+		changeLogin: `${API_BASE_URL}/auth/change-login`,
+		changePassword: `${API_BASE_URL}/auth/change-password`,
 	},
 	users: {
-		list: `${API_BASE_URL}/users`,
 		create: `${API_BASE_URL}/users`,
 	},
 	columns: {
@@ -55,7 +61,9 @@ export const api: ApiConfig = {
 	},
 	tasks: {
 		list: (categoryId) => `${API_BASE_URL}/categories/${categoryId}/tasks`,
-        create: (categoryId) => `${API_BASE_URL}/categories/${categoryId}/tasks`
+        create: (categoryId) => `${API_BASE_URL}/categories/${categoryId}/tasks`,
+		update: (taskId) => `${API_BASE_URL}/tasks/${taskId}`,
+		move: (taskId) => `${API_BASE_URL}/tasks/${taskId}/move`
 	},
 	subtasks: {
 		list: (taskId) => `${API_BASE_URL}/tasks/${taskId}/subtasks`,

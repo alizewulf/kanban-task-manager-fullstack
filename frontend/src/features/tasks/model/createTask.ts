@@ -1,6 +1,6 @@
 import { api } from "@/shared/config/api/api.config";
 import type { Task } from "./task.types";
-import axios from "axios";
+import { apiClient } from "@/shared/config/api/apiClient";
 
 interface CreateTaskData {
     title: string,
@@ -8,6 +8,6 @@ interface CreateTaskData {
 }
 
 export async function createTask(categoryId: number, data: CreateTaskData): Promise<Task> {
-    const response = await axios.post(api.tasks.create(categoryId), data)
+    const response = await apiClient.post(api.tasks.create(categoryId), data)
     return response.data
 }

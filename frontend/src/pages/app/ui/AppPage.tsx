@@ -1,7 +1,7 @@
 import EmptyBoardContent from "@/widgets/Layout/AppLayout/ui/EmptyBoardContent/EmptyBoardContent";
 import { Header, Main, Sidebar } from "../../../widgets/Layout/AppLayout";
 import Modal from "@/shared/ui/modal";
-import MainContent from "@/widgets/Layout/AppLayout/ui/MainContent/";
+import MainContent from "@/widgets/Layout/AppLayout/MainContent";
 import { useAppContext } from "@/shared/context/app.context";
 
 function AppPage() {

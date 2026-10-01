@@ -4,7 +4,7 @@ import { getSubtasks } from "@/features/subtasks/model/getSubtask";
 import type { Subtask } from "@/features/subtasks/model/subtask.types";
 import type { Task } from "@/features/tasks/model/task.types";
 
-export function useTaskSubtasks(tasksByCategory: Record<number, Task[]>) {
+export function useBoardSubtasks(tasksByCategory: Record<number, Task[]>) {
   const [subtasks, setSubtasks] = useState<Record<number, Subtask[]>>({});
 
   useEffect(() => {
@@ -12,7 +12,6 @@ export function useTaskSubtasks(tasksByCategory: Record<number, Task[]>) {
       .flatMap((tasks) => tasks.map((task) => task.id));
 
     if (taskIds.length === 0) {
-      setSubtasks({});
       return;
     }
 
@@ -32,10 +31,14 @@ export function useTaskSubtasks(tasksByCategory: Record<number, Task[]>) {
       );
 
       if (isMounted) {
-        setSubtasks((current) => ({
-          ...current,
-          ...nextSubtasks,
-        }));
+        const activeTaskIds = new Set(taskIds);
+        setSubtasks((current) => {
+          const activeSubtasks = Object.fromEntries(
+            Object.entries(current).filter(([taskId]) => activeTaskIds.has(Number(taskId)))
+          );
+
+          return { ...activeSubtasks, ...nextSubtasks };
+        });
       }
     };
 
@@ -53,8 +56,5 @@ export function useTaskSubtasks(tasksByCategory: Record<number, Task[]>) {
     }));
   };
 
-  return {
-    subtasks,
-    updateSubtasks,
-  };
+  return { subtasks, updateSubtasks };
 }
