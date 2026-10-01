@@ -19,6 +19,47 @@ interface LoginFormValues {
   password: string;
 }
 
+function getLoginErrorMessage(error: unknown): string {
+  if (!axios.isAxiosError(error)) {
+    return "Unable to sign in. Please try again.";
+  }
+
+  const status = error.response?.status;
+  const backendMessage = typeof error.response?.data?.message === "string"
+    ? error.response.data.message.trim()
+    : "";
+
+  if (error.code === "ERR_NETWORK" || !error.response) {
+    return "Unable to connect to the server. Please check your connection and try again.";
+  }
+
+  if (status && status >= 500) {
+    return "The server is currently unavailable. Please try again later.";
+  }
+
+  if (status === 401 || status === 400) {
+    const normalizedMessage = backendMessage.toLowerCase();
+
+    if (
+      !backendMessage ||
+      normalizedMessage.includes("invalid login") ||
+      normalizedMessage.includes("wrong login") ||
+      normalizedMessage.includes("authentication required") ||
+      normalizedMessage.includes("incorrect")
+    ) {
+      return "Invalid login or password.";
+    }
+
+    return backendMessage;
+  }
+
+  if (backendMessage) {
+    return backendMessage;
+  }
+
+  return "Unable to sign in. Please try again.";
+}
+
 function useLoginForm() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
@@ -40,10 +81,7 @@ function useLoginForm() {
         }));
         navigate("/app", { replace: true });
       } catch (error) {
-        const message = axios.isAxiosError(error)
-          ? error.response?.data?.message
-          : undefined;
-        setStatus(message ?? "Wrong login or password");
+        setStatus(getLoginErrorMessage(error));
       } finally {
         setSubmitting(false);
       }

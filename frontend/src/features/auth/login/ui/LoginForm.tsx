@@ -1,9 +1,11 @@
 import { Form, Field, ErrorMessage, FormikProvider } from "formik";
+import { useState } from "react";
 import Button from "../../../../shared/ui/button/Button";
 import useLoginForm from "../model/useLoginForm";
 
 function LoginForm() {
   const { formik, isSubmitLocked, clearErrorOnFieldChange } = useLoginForm();
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <FormikProvider value={formik}>
@@ -28,13 +30,37 @@ function LoginForm() {
         <label className="block text-[13px] font-semibold text-accent1">
           <span className="mb-2 block">Password</span>
 
-          <Field
-            type="password"
-            name="password"
-            placeholder="••••••••"
-            onChange={clearErrorOnFieldChange}
-            className="w-full rounded-2xl border border-accent3 bg-accent4 px-4 py-3 text-[14px] text-accent1 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
-          />
+          <div className="relative">
+            <Field
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="••••••••"
+              onChange={clearErrorOnFieldChange}
+              className="w-full rounded-2xl border border-accent3 bg-accent4 px-4 py-3 pr-12 text-[14px] text-accent1 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            />
+
+            <button
+              type="button"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              onClick={() => setShowPassword((current) => !current)}
+              className="absolute inset-y-0 right-3 flex items-center text-accent3-hover transition hover:text-accent1"
+            >
+              {showPassword ? (
+                <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[1.8]" aria-hidden="true">
+                  <path d="M3 3L21 21" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M10.58 10.58A2 2 0 0 0 13.42 13.42" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M9.88 5.08A10.94 10.94 0 0 1 12 5c4.97 0 8.5 4.5 9 7-.48 1.92-2.08 4.7-4.86 6.24" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M6.61 6.61A15.62 15.62 0 0 0 3 12c.5 2.5 4.03 7 9 7 1.82 0 3.46-.4 4.89-1.1" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" className="h-5 w-5 fill-none stroke-current stroke-[1.8]" aria-hidden="true">
+                  <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" strokeLinecap="round" strokeLinejoin="round" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              )}
+            </button>
+          </div>
+
           <ErrorMessage
             name="password"
             component="div"
