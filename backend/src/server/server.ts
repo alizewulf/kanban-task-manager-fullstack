@@ -20,8 +20,8 @@ function startServer() {
 
     app.use("/users", usersRouter);
     app.use("/auth", authRouter);
-    app.use("/columns", columnsRouter)
-    app.use("/columns", categoryRouter)
+    app.use("/columns", columnsRouter);
+    app.use("/columns", categoryRouter);
     app.use("/", taskRouter);
     app.use("/", subtasksRouter);
     app.listen(server_config.port, () => {
