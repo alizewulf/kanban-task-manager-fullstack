@@ -22,6 +22,7 @@ apiClient.interceptors.response.use(
     if (
       axios.isAxiosError(error) &&
       error.response?.status === 401 &&
+      error.response.data?.code === "AUTH_TOKEN_INVALID" &&
       error.config?.headers?.Authorization
     ) {
       clearAccessToken();
