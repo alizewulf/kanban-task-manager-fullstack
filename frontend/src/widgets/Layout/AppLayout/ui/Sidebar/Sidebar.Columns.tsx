@@ -44,7 +44,7 @@ function SidebarColumns({ userId }:{userId:number}) {
     <div className="flex flex-col gap-5">
       {error && (
         <p role="alert" className="px-8 text-sm text-accent3-hover">
-          Не удалось загрузить список досок. {data.length > 0 ? "Показаны сохранённые данные." : "Попробуйте обновить страницу."}
+          Failed to load the boards list. {data.length > 0 ? "Saved data is shown." : "Try refreshing the page."}
         </p>
       )}
       <span className={`px-8 ${textStyles.heading.sm} tracking-[2.4px] text-accent3-hover uppercase font-bold`}>
