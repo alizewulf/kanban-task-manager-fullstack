@@ -2,6 +2,41 @@
 
 A full-stack kanban board application with user authentication, task management, and drag-and-drop functionality. Built with React, Express, PostgreSQL, and TypeScript.
 
+## Screenshots
+
+<table>
+  <tr>
+    <td><img src="./screenshots/20261002_223959.png" width="400" style="max-width: 100%;"></td>
+    <td><img src="./screenshots/20261002_224025.png" width="400" style="max-width: 100%;"></td>
+  </tr>
+  <tr>
+    <td><img src="./screenshots/20261002_224211.png" width="400" style="max-width: 100%;"></td>
+    <td><img src="./screenshots/20261002_224209.png" width="400" style="max-width: 100%;"></td>
+  </tr>
+</table>
+
+<details>
+  <summary>View more screenshots</summary>
+
+  <br>
+
+  <table>
+    <tr>
+      <td><img src="./screenshots/20261002_224157.png" width="400" style="max-width: 100%;"></td>
+      <td><img src="./screenshots/20261002_224141.png" width="400" style="max-width: 100%;"></td>
+    </tr>
+    <tr>
+      <td><img src="./screenshots/20261002_224211.png" width="400" style="max-width: 100%;"></td>
+      <td><img src="./screenshots/20261002_224215.png" width="400" style="max-width: 100%;"></td>
+    </tr>
+    <tr>
+      <td><img src="./screenshots/20261002_224222.png" width="400" style="max-width: 100%;"></td>
+      <td><img src="./screenshots/20261002_224227.png" width="400" style="max-width: 100%;"></td>
+    </tr>
+  </table>
+
+</details>
+
 ## Features
 
 ### Authentication & Security
