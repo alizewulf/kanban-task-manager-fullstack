@@ -19,7 +19,7 @@ function Sidebar() {
   return (
     <>
     {sidebarState? (
-    <aside className={`w-1/5 flex flex-col border-r ${isDark? "border-r-accent3" : "border-r-accent2-hover"} justify-between ${isDark? "bg-white" : "bg-dark"}`}>
+    <aside className={`w-1/5 flex flex-col border-r ${isDark ? "border-r-accent2-hover bg-dark" : "border-r-accent3 bg-white"} justify-between`}>
       <div className="flex flex-col gap-20">
         <SidebarHeader />
         {auth.user && <SidebarColumns userId={auth.user.id}/>}
@@ -30,7 +30,7 @@ function Sidebar() {
         <button
           type="button"
           onClick={() => openModal(<SettingsPanel />)}
-          className={`mb-4 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition hover:bg-primary/10 ${isDark ? "text-black" : "text-white"}`}
+          className={`mb-4 flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition hover:bg-primary/10 ${isDark ? "text-white" : "text-black"}`}
         >
           <SettingsIcon className="shrink-0 flex items-center" />
           Settings

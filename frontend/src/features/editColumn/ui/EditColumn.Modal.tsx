@@ -134,7 +134,7 @@ function EditColumnModal() {
                           name={`fields.${index}.title`}
                           type="text"
                           placeholder="e.g. To Do"
-                          className={`min-w-0 flex-1 px-4 py-2 outline outline-accent3-hover ${textStyles.body.lg} ${isDark ? "placeholder:text-black text-black!" : "placeholder:text-white! text-white"}`}
+                          className={`min-w-0 flex-1 px-4 py-2 outline outline-accent3-hover ${textStyles.body.lg} ${isDark ? "bg-very-darkbg placeholder:text-white text-white" : "bg-accent4 placeholder:text-accent3-hover text-accent1"}`}
                         />
                         <button
                           type="button"

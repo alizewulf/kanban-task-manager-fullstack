@@ -1,8 +1,8 @@
 import { ErrorMessage, Field, Form, Formik } from "formik"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from "react-router"
 import Button from "../../../../shared/ui/button/Button"
-import type { AppDispatch } from "../../../../store/store"
+import type { AppDispatch, RootState } from "../../../../store/store"
 import { setAuth } from "../../login/model/authSlice"
 import { setAccessToken } from "../../../../shared/config/api/accessToken"
 import validate from "../model/validate"
@@ -12,6 +12,8 @@ import axios from "axios"
 function RegisterForm() {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
+  const theme = useSelector((state: RootState) => state.theme.theme)
+  const isDark = theme === "dark"
 
   return (
     <Formik initialValues={
@@ -38,13 +40,13 @@ function RegisterForm() {
     >
       {({ isSubmitting, status }) => (
       <Form className="space-y-4">
-        <label className="block text-[13px] font-semibold text-accent1">
+        <label className={`block text-[13px] font-semibold ${isDark ? "text-white" : "text-accent1"}`}>
           <span className="mb-2 block">Login</span>
           <Field
             name="login"
             type="text"
             placeholder="Your Login"
-            className="w-full rounded-2xl border border-accent3 bg-accent4 px-4 py-3 text-[14px] text-accent1 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            className={`w-full rounded-2xl border px-4 py-3 text-[14px] outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 ${isDark ? "border-accent2-hover bg-very-darkbg text-white" : "border-accent3 bg-accent4 text-accent1"}`}
           />
           <ErrorMessage
             name="login"
@@ -53,13 +55,13 @@ function RegisterForm() {
           />
         </label>
 
-        <label className="block text-[13px] font-semibold text-accent1">
+        <label className={`block text-[13px] font-semibold ${isDark ? "text-white" : "text-accent1"}`}>
           <span className="mb-2 block">Password</span>
           <Field
             name="password"
             type="password"
             placeholder="Create a strong password"
-            className="w-full rounded-2xl border border-accent3 bg-accent4 px-4 py-3 text-[14px] text-accent1 outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20"
+            className={`w-full rounded-2xl border px-4 py-3 text-[14px] outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 ${isDark ? "border-accent2-hover bg-very-darkbg text-white" : "border-accent3 bg-accent4 text-accent1"}`}
           />
           <ErrorMessage
             name="password"
