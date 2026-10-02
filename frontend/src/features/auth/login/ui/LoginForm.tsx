@@ -84,14 +84,6 @@ function LoginForm() {
           </div>
         ) : null}
 
-        <div className="flex items-center justify-end text-[13px]">
-          <a
-            href="#"
-            className="font-semibold text-primary hover:text-primary-hover"
-          >
-            Forgot password?
-          </a>
-        </div>
         <p className={`text-xs ${isDark ? "text-slate-400" : "text-accent3-hover"}`}>
           This session is kept in memory and ends when the page is reloaded.
         </p>
