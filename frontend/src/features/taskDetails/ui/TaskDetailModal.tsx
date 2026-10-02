@@ -5,6 +5,7 @@ import type { Subtask } from "@/features/subtasks/model/subtask.types";
 import type { Task } from "@/features/tasks/model/task.types";
 import { updateTaskDetails } from "@/features/taskDetails/model/updateTaskDetails";
 import type { TaskDetailsSubtaskInput } from "@/features/taskDetails/model/updateTaskDetails";
+import DeleteTaskModal from "@/features/deleteTask/ui/DeleteTask.Modal";
 import textStyles from "@/shared/typography/typography";
 import { useModal } from "@/shared/ui/modal/useModal";
 import EditIcon from "./EditIcon";
@@ -14,6 +15,7 @@ interface TaskDetailsModalProps {
     subtasks: Subtask[];
     setSubtasks: (subtasks: Subtask[]) => void;
     onTaskSaved: (task: Task, subtasks: Subtask[]) => void;
+    onTaskDeleted?: (taskId: number) => void;
 }
 
 interface DraftSubtask extends TaskDetailsSubtaskInput {
@@ -29,7 +31,7 @@ function toDraftSubtasks(subtasks: Subtask[]): DraftSubtask[] {
     }));
 }
 
-function TaskDetailModal({ task, subtasks, setSubtasks, onTaskSaved }: TaskDetailsModalProps) {
+function TaskDetailModal({ task, subtasks, setSubtasks, onTaskSaved, onTaskDeleted }: TaskDetailsModalProps) {
     const [loading, setLoading] = useState(subtasks.length === 0);
     const [loadFailed, setLoadFailed] = useState(false);
     const initialSubtasks = useRef(subtasks);
@@ -41,7 +43,7 @@ function TaskDetailModal({ task, subtasks, setSubtasks, onTaskSaved }: TaskDetai
     const [draftTitle, setDraftTitle] = useState(task.title);
     const [draftDescription, setDraftDescription] = useState(task.description ?? "");
     const [draftSubtasks, setDraftSubtasks] = useState(() => toDraftSubtasks(subtasks));
-    const { closeModal } = useModal();
+    const { closeModal, openModal } = useModal();
     const setSubtasksRef = useRef(setSubtasks);
 
     useEffect(() => {
@@ -163,6 +165,19 @@ function TaskDetailModal({ task, subtasks, setSubtasks, onTaskSaved }: TaskDetai
             ...current,
             { title: "", completed: false, draftKey: crypto.randomUUID() },
         ]);
+    };
+
+    const handleDeleteTask = () => {
+        openModal(
+            <DeleteTaskModal
+                taskId={task.id}
+                taskTitle={draftTitle.trim() || task.title}
+                onDeleted={(deletedTaskId) => {
+                    onTaskDeleted?.(deletedTaskId);
+                    closeModal();
+                }}
+            />
+        );
     };
 
     return (
@@ -299,23 +314,33 @@ function TaskDetailModal({ task, subtasks, setSubtasks, onTaskSaved }: TaskDetai
             {status && <p role="alert" className={`${textStyles.body.md} text-danger`}>{status}</p>}
 
             {isEditing && (
-                <div className="flex justify-end gap-3">
+                <div className="flex justify-between gap-3">
                     <button
                         type="button"
                         disabled={isSaving}
-                        className={`${textStyles.body.md} appereance-none rounded-[20px] border border-accent3-hover px-5 py-2 font-bold hover:bg-accent3-hover/10 disabled:opacity-50`}
-                        onClick={closeModal}
+                        className={`${textStyles.body.md} appereance-none rounded-[20px] border border-danger/50 px-5 py-2 font-bold text-danger hover:bg-danger/10 disabled:opacity-50`}
+                        onClick={handleDeleteTask}
                     >
-                        Cancel
+                        Delete Task
                     </button>
-                    <button
-                        type="button"
-                        disabled={isSaving}
-                        className={`${textStyles.body.md} appereance-none rounded-[20px] bg-primary px-5 py-2 font-bold text-white hover:bg-primary-hover disabled:opacity-50`}
-                        onClick={handleSave}
-                    >
-                        {isSaving ? "Saving..." : "Save changes"}
-                    </button>
+                    <div className="flex gap-3">
+                        <button
+                            type="button"
+                            disabled={isSaving}
+                            className={`${textStyles.body.md} appereance-none rounded-[20px] border border-accent3-hover px-5 py-2 font-bold hover:bg-accent3-hover/10 disabled:opacity-50`}
+                            onClick={closeModal}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            disabled={isSaving}
+                            className={`${textStyles.body.md} appereance-none rounded-[20px] bg-primary px-5 py-2 font-bold text-white hover:bg-primary-hover disabled:opacity-50`}
+                            onClick={handleSave}
+                        >
+                            {isSaving ? "Saving..." : "Save changes"}
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

@@ -43,6 +43,15 @@ export function useTaskBoard(): TaskBoardModel {
           }));
           updateSubtasks(task.id, updatedSubtasks);
         }}
+        onTaskDeleted={(deletedTaskId) => {
+          setTasks((current) => Object.fromEntries(
+            Object.entries(current).map(([categoryId, categoryTasks]) => [
+              categoryId,
+              categoryTasks.filter((currentTask) => currentTask.id !== deletedTaskId),
+            ])
+          ));
+          updateSubtasks(deletedTaskId, []);
+        }}
       />
     );
   };

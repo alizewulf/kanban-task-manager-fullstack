@@ -14,7 +14,7 @@ function CreateTaskColumnButton({ onCreated }: CreateTaskColumnButtonProps) {
   const theme = useSelector((state: RootState) => state.theme.theme)
   const isDark = theme === "dark"
   return (
-    <div className={`flex px-13.75 h-full items-center outline-[#AFB6B9] ${textStyles.heading.xl} text-accent3-hover bg-linear-to-r ${isDark? "from-[#E9EFFA]/0 to-[#E9EFFA]/100" : "from-[#2B2C37] to-[#2B2C37]/50"}`}>
+    <div className={`flex px-13.75 h-full items-center outline-[#AFB6B9] ${textStyles.heading.xl} text-accent3-hover bg-linear-to-r ${isDark ? "from-[#2B2C37]/0 to-[#2B2C37]/100" : "from-[#E9EFFA]/0 to-[#E9EFFA]/100"}`}>
       <button
         onClick={() => openModal(<CreateTaskColumnModal onCreated={onCreated} />)}
         className="appearance-none h-full w-full">+ New Column</button>

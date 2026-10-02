@@ -69,7 +69,7 @@ function CreateColumnModal({ onCreated }: CreateColumnModalProps) {
                   <span className={`${textStyles.body.md} text-accent3-hover font-bold!`}>Columns</span>
                   {values.fields.map((_, index) => (
                     <div key={index} className="flex gap-4 items-center">
-                      <Field name={`fields.${index}`} type="text" className={`px-4 py-2 outline outline-accent3-hover ${textStyles.body.lg} ${isDark? "placeholder:text-black text-black!":"placeholder:text-white! text-white"}`} placeholder="e.g. To Do" />
+                      <Field name={`fields.${index}`} type="text" className={`px-4 py-2 outline outline-accent3-hover ${textStyles.body.lg} ${isDark ? "bg-very-darkbg placeholder:text-white text-white" : "bg-accent4 placeholder:text-accent3-hover text-accent1"}`} placeholder="e.g. To Do" />
                       <button
                         type="button"
                         onClick={() => remove(index)}

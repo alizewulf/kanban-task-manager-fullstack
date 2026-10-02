@@ -1,5 +1,13 @@
 import type { Request, Response } from "express";
-import { createTask, getTasks, InvalidSubtaskIdsError, InvalidTaskMoveError, moveTask, updateTaskDetails } from "./task.service.js";
+import {
+  createTask,
+  deleteTask,
+  getTasks,
+  InvalidSubtaskIdsError,
+  InvalidTaskMoveError,
+  moveTask,
+  updateTaskDetails,
+} from "./task.service.js";
 
 export async function getTasksController(req: Request, res: Response) {
   try {
@@ -58,17 +66,17 @@ export async function createTaskController(req: Request, res: Response) {
             return res.status(400).json({ message: "Invalid category ID" });
         }
 
-        const {title, description} = req.body;
+        const { title, description = "" } = req.body ?? {};
         
         if (typeof title !== "string" || !title.trim()) {
             return res.status(400).json({ message: "Invalid title" });
         }
 
-        if (typeof description !== "string" || !description.trim()) {
+        if (typeof description !== "string") {
             return res.status(400).json({ message: "Invalid description" });
         }
 
-        const task = await createTask(categoryId, title, description);
+        const task = await createTask(categoryId, title, description.trim());
         res.status(201).json(task);
     } catch (error) {
         console.log(error);
@@ -129,6 +137,27 @@ export async function updateTaskDetailsController(req: Request, res: Response) {
       return res.status(400).json({ message: "A subtask does not belong to this task" });
     }
 
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+export async function deleteTaskController(req: Request, res: Response) {
+  try {
+    const taskId = Number(req.params.taskId);
+
+    if (!Number.isSafeInteger(taskId) || taskId < 1) {
+      return res.status(400).json({ message: "Invalid task ID" });
+    }
+
+    const deletedTask = await deleteTask(taskId);
+
+    if (!deletedTask) {
+      return res.status(404).json({ message: "Task not found" });
+    }
+
+    return res.status(200).json({ message: "Task deleted successfully" });
+  } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }

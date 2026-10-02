@@ -10,7 +10,7 @@ function SidebarHeader() {
 
         <div className="flex pt-8 pl-8 items-center gap-4">
             <img src={logo} alt="logo" />
-            <h1 className={`${textStyles.heading.xl} ${isDark ? "text-black" : "text-white"}`}>kanban</h1>
+            <h1 className={`${textStyles.heading.xl} ${isDark ? "text-white" : "text-black"}`}>kanban</h1>
         </div>
     )
 }

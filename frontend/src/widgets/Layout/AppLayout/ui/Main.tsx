@@ -6,7 +6,7 @@ export default function AppMain({ children }: { children?: React.ReactNode }) {
   const isDark = theme === "dark"
 
   return (
-    <main className={`flex h-screen ${isDark? "bg-gray-50" : "bg-very-darkbg"} w-full`}>
+    <main className={`flex h-screen ${isDark ? "bg-very-darkbg" : "bg-gray-50"} w-full`}>
       {children}
     </main>
   );

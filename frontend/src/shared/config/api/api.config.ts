@@ -25,6 +25,7 @@ export interface ApiConfig {
 		list: (categoryId: number) => string
         create: (categoryId: number) => string
 		update: (taskId: number) => string
+		delete: (taskId: number) => string
 		move: (taskId: number) => string
 	}
 	subtasks: {
@@ -63,6 +64,7 @@ export const api: ApiConfig = {
 		list: (categoryId) => `${API_BASE_URL}/categories/${categoryId}/tasks`,
         create: (categoryId) => `${API_BASE_URL}/categories/${categoryId}/tasks`,
 		update: (taskId) => `${API_BASE_URL}/tasks/${taskId}`,
+		delete: (taskId) => `${API_BASE_URL}/tasks/${taskId}`,
 		move: (taskId) => `${API_BASE_URL}/tasks/${taskId}/move`
 	},
 	subtasks: {

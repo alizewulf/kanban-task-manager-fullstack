@@ -37,9 +37,9 @@ function TaskCard({
       onDragOver={(event) => onDragOver(task, event)}
       onDrop={(event) => onDrop(task, event)}
       onDragEnd={onDragEnd}
-      className={`group h-22 max-w-75 flex cursor-pointer touch-none flex-col justify-center gap-2 rounded-lg px-4 py-6 font-bold! active:cursor-grabbing ${isDark ? "bg-white" : "bg-[#2B2C37]"} ${isDragging ? "opacity-45" : ""}`}
+      className={`group h-22 max-w-75 flex cursor-pointer touch-none flex-col justify-center gap-2 rounded-lg px-4 py-6 font-bold! active:cursor-grabbing ${isDark ? "bg-[#2B2C37]" : "bg-white"} ${isDragging ? "opacity-45" : ""}`}
     >
-      <p className={`${isDark ? "text-black" : "text-white"} capitalize ${textStyles.heading.md} transition-all duration-200 group-hover:translate-x-1 group-hover:text-primary`}>
+      <p className={`${isDark ? "text-white" : "text-black"} capitalize ${textStyles.heading.md} transition-all duration-200 group-hover:translate-x-1 group-hover:text-primary`}>
         {task.title}
       </p>
 

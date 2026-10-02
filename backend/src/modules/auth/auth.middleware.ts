@@ -7,7 +7,10 @@ export const authenticateToken: RequestHandler = (req, res, next) => {
   const match = authorization?.match(/^Bearer\s+([^\s]+)$/i);
 
   if (!match) {
-    return res.status(401).json({ message: "Authentication required" });
+    return res.status(401).json({
+      code: authorization ? "AUTH_TOKEN_INVALID" : "AUTH_REQUIRED",
+      message: authorization ? "Invalid access token" : "Authentication required",
+    });
   }
 
   try {
@@ -16,17 +19,26 @@ export const authenticateToken: RequestHandler = (req, res, next) => {
     });
 
     if (typeof payload === "string" || typeof payload.sub !== "string") {
-      return res.status(401).json({ message: "Invalid access token" });
+      return res.status(401).json({
+        code: "AUTH_TOKEN_INVALID",
+        message: "Invalid access token",
+      });
     }
 
     const id = Number(payload.sub);
     if (!Number.isSafeInteger(id) || id < 1) {
-      return res.status(401).json({ message: "Invalid access token" });
+      return res.status(401).json({
+        code: "AUTH_TOKEN_INVALID",
+        message: "Invalid access token",
+      });
     }
 
     req.user = { id };
     return next();
   } catch {
-    return res.status(401).json({ message: "Invalid or expired access token" });
+    return res.status(401).json({
+      code: "AUTH_TOKEN_INVALID",
+      message: "Invalid or expired access token",
+    });
   }
 };
