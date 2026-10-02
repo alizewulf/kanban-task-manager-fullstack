@@ -16,6 +16,10 @@ import { getTasks } from "@/features/tasks/model/getTasks";
 interface AppContextValue {
     selectedColumn: Column | null;
     setSelectedColumn: (column: Column | null) => void;
+    boardLoading: boolean;
+    boardError: string | null;
+    loadedColumnId: number | null;
+    retryBoardLoad: () => void;
     removeColumn: (columnId: number) => void;
     setRemoveColumn: (removeColumn: (columnId: number) => void) => void;
     categories: TaskCategory[];
@@ -37,37 +41,60 @@ export function AppProvider({
         useState<TaskCategory[]>([]);
     const [tasks, setTasks] =
         useState<Record<number, Task[]>>({});
+    const [boardLoading, setBoardLoading] = useState(false);
+    const [boardError, setBoardError] = useState<string | null>(null);
+    const [boardErrorColumnId, setBoardErrorColumnId] = useState<number | null>(null);
+    const [loadedColumnId, setLoadedColumnId] = useState<number | null>(null);
+    const [reloadKey, setReloadKey] = useState(0);
     const [removeColumn, setRemoveColumn] =
         useState<(columnId: number) => void>(() => {});
 
+    const retryBoardLoad = () => setReloadKey((current) => current + 1);
+
     useEffect(() => {
         let isMounted = true;
+        const columnId = selectedColumn?.id;
 
         const loadBoardData = async () => {
-            if (!selectedColumn) {
+            if (columnId === undefined) {
                 setCategories([]);
                 setTasks({});
+                setLoadedColumnId(null);
+                setBoardLoading(false);
+                setBoardError(null);
+                setBoardErrorColumnId(null);
                 return;
             }
 
-            const loadedCategories = await getCategories(selectedColumn.id);
+            setBoardLoading(true);
+            setBoardError(null);
+            setBoardErrorColumnId(null);
 
-            if (!isMounted) {
-                return;
-            }
+            try {
+                const loadedCategories = await getCategories(columnId);
+                const taskEntries = await Promise.all(
+                    loadedCategories.map(async (category) => [
+                        category.id,
+                        await getTasks(category.id)
+                    ] as const)
+                );
 
-            setCategories(loadedCategories);
+                if (!isMounted) {
+                    return;
+                }
 
-            const loadedTasks: Record<number, Task[]> = {};
-
-            await Promise.all(
-                loadedCategories.map(async (category) => {
-                    loadedTasks[category.id] = await getTasks(category.id);
-                })
-            );
-
-            if (isMounted) {
-                setTasks(loadedTasks);
+                setCategories(loadedCategories);
+                setTasks(Object.fromEntries(taskEntries));
+                setLoadedColumnId(columnId);
+            } catch {
+                if (isMounted) {
+                    setBoardError("Не удалось загрузить доску. Проверьте соединение и попробуйте ещё раз.");
+                    setBoardErrorColumnId(columnId);
+                }
+            } finally {
+                if (isMounted) {
+                    setBoardLoading(false);
+                }
             }
         };
 
@@ -76,13 +103,17 @@ export function AppProvider({
         return () => {
             isMounted = false;
         };
-    }, [selectedColumn]);
+    }, [selectedColumn?.id, reloadKey]);
 
     return (
         <AppContext.Provider
             value={{
                 selectedColumn,
                 setSelectedColumn,
+                boardLoading,
+                boardError: boardErrorColumnId === selectedColumn?.id ? boardError : null,
+                loadedColumnId,
+                retryBoardLoad,
                 removeColumn,
                 setRemoveColumn,
                 categories,
