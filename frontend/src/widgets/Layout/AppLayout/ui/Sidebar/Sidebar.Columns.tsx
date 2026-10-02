@@ -2,7 +2,7 @@ import  useColumns  from "@/features/columns/useColumns/useColumns"
 import textStyles from "@/shared/typography/typography";
 import AbstractIcon, { iconFillColors } from "./icons/AbstractIcon";
 import { useAppContext } from "@/shared/context/app.context";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import ColumnSkeleton from "./Column.Skeleton";
 import CreateColumnButton from "@/features/columns/ui/CreateColumn.Button";
 import { useModal } from "@/shared/ui/modal/useModal";
@@ -13,19 +13,17 @@ function SidebarColumns({ userId }:{userId:number}) {
 
   const { data, loading, error, addColumn, updateColumn, removeColumn: removeColumnFromState } = useColumns(userId)
   const { selectedColumn, setSelectedColumn, setRemoveColumn } = useAppContext();
-  const [activeColumn, setActiveColumn] = useState<number>(1)
+  const activeColumn = selectedColumn?.id ?? 0
   const { openModal } = useModal()
 
   function handleColumnCreated(column: Column) {
     addColumn(column)
     setSelectedColumn(column)
-    setActiveColumn(column.id)
   }
 
   useEffect(() => {
     if (!loading && data.length > 0 && !selectedColumn) {
       setSelectedColumn(data[0]);
-      setActiveColumn(data[0].id);
     }
   }, [loading, data, selectedColumn, setSelectedColumn])
 
@@ -38,22 +36,23 @@ function SidebarColumns({ userId }:{userId:number}) {
   useEffect(() => {
     setRemoveColumn(() => (columnId: number) => {
       setSelectedColumn(null)
-      setActiveColumn(0)
       removeColumnFromState(columnId)
     })
   }, [removeColumnFromState, setRemoveColumn, setSelectedColumn])
 
-  if (error) {
-    return <div>{error}</div>;
-  }
   return (
     <div className="flex flex-col gap-5">
+      {error && (
+        <p role="alert" className="px-8 text-sm text-accent3-hover">
+          Не удалось загрузить список досок. {data.length > 0 ? "Показаны сохранённые данные." : "Попробуйте обновить страницу."}
+        </p>
+      )}
       <span className={`px-8 ${textStyles.heading.sm} tracking-[2.4px] text-accent3-hover uppercase font-bold`}>
         All Boards ({data.length})
       </span>
 
       <ul>
-        {loading ? (
+        {loading && data.length === 0 ? (
           <div className="flex flex-col pl-8 gap-2">
             {Array.from({ length: 4 }, () => (
               <ColumnSkeleton />
@@ -69,7 +68,6 @@ function SidebarColumns({ userId }:{userId:number}) {
                 }`}
               onClick={() => {
                 setSelectedColumn(column);
-                setActiveColumn(column.id);
               }}
             >
               <AbstractIcon
