@@ -66,17 +66,17 @@ export async function createTaskController(req: Request, res: Response) {
             return res.status(400).json({ message: "Invalid category ID" });
         }
 
-        const {title, description} = req.body;
+        const { title, description = "" } = req.body ?? {};
         
         if (typeof title !== "string" || !title.trim()) {
             return res.status(400).json({ message: "Invalid title" });
         }
 
-        if (typeof description !== "string" || !description.trim()) {
+        if (typeof description !== "string") {
             return res.status(400).json({ message: "Invalid description" });
         }
 
-        const task = await createTask(categoryId, title, description);
+        const task = await createTask(categoryId, title, description.trim());
         res.status(201).json(task);
     } catch (error) {
         console.log(error);
