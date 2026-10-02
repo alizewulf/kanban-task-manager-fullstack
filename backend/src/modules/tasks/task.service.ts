@@ -24,6 +24,15 @@ export async function getTasks(categoryId: number) {
   return result.rows
 }
 
+export async function deleteTask(taskId: number) {
+  const result = await pool.query(
+    'DELETE FROM tasks WHERE id = $1 RETURNING *',
+    [taskId]
+  )
+
+  return result.rows[0] ?? null
+}
+
 export async function createTask(categoryId: number, title: string, description: string) {
     const positionResult = await pool.query(
   'SELECT COALESCE(MAX(position), 0) AS max_position FROM tasks WHERE category_id = $1',
