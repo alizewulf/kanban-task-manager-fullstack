@@ -24,7 +24,7 @@ function startServer() {
     app.use("/columns", categoryRouter);
     app.use("/", taskRouter);
     app.use("/", subtasksRouter);
-    app.listen(server_config.port, () => {
+    app.listen(server_config.port, "0.0.0.0", () => {
         console.log(
             `Server is running on ${server_config.host}:${server_config.port}`,
         );
