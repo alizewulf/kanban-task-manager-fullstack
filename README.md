@@ -37,6 +37,9 @@ A full-stack kanban board application with user authentication, task management,
 
 </details>
 
+[Live Demo](https://alizewulf.github.io/kanban-task-manager-fullstack/)
+
+
 ## Features
 
 ### Authentication & Security
