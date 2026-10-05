@@ -38,7 +38,16 @@ export async function createUserController(
             return res.status(409).json({ message: "This login is already in use" });
         }
 
-        console.error(error);
+        const errorCode = typeof error === "object" && error !== null && "code" in error ? error.code : undefined;
+        const errorMessage = typeof error === "object" && error !== null && "message" in error ? error.message : undefined;
+        const errorDetail = typeof error === "object" && error !== null && "detail" in error ? error.detail : undefined;
+
+        console.error("User creation failed", {
+            code: errorCode,
+            message: errorMessage,
+            detail: errorDetail,
+        });
+
         return res.status(500).json({ message: "Unable to create user" });
     }
 }
