@@ -38,7 +38,7 @@ A full-stack kanban board application with user authentication, task management,
 </details>
 
 **[Live Demo]**(https://alizewulf.github.io/kanban-task-manager-fullstack/)
-
+**Demo note:** The backend is hosted on a free-tier service and may take some time to wake up after inactivity. As a result, the first registration, login, or API request may take longer than usual.
 
 ## Features
 
